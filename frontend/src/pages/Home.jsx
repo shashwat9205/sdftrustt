@@ -210,9 +210,6 @@ const Home = () => {
                     <p className="text-gray-500 text-sm mb-6 grow">
                       {card.info}
                     </p>
-                    <button className="bg-primary hover:bg-[#5a6425] text-white px-6 py-2 rounded-full font-medium text-sm transition-colors self-start mt-auto">
-                      Learn More
-                    </button>
                   </div>
                 </div>
               ))}
