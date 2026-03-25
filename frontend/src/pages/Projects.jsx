@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -105,7 +105,8 @@ const Projects = () => {
             ) : (
               projects.map((project) => (
                 <div key={project.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
-                  <img src={project.image_url} alt={project.title} className="w-full md:w-48 h-48 object-cover rounded-lg" />
+                  <img src={`${ADMIN_BASE_URL}${project.image_url}`} alt={project.title} className="w-full md:w-48 h-48 object-cover rounded-lg" />
+
                   <div>
                     <div className="text-xs font-bold text-accent uppercase tracking-wider mb-2">{project.category}</div>
                     <h3 className="text-2xl font-serif font-bold text-text-primary mb-2">{project.title}</h3>
