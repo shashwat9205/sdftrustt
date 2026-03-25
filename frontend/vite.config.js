@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/admin': {
-        target: 'http://localhost/backend/admin',
+        target: 'https://sdftrustt.vercel.app/admin',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/admin/, ''),
       },
