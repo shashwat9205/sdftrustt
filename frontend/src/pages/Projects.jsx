@@ -18,7 +18,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/projects.php`);
+        const response = await fetch(`${API_BASE_URL}/projects.php?t=${Date.now()}`);
         const data = await response.json();
         
         if (data.status === 'success') {

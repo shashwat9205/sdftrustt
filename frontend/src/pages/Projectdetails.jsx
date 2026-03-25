@@ -30,7 +30,7 @@ const ProjectDetails = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/projects.php`);
+        const response = await fetch(`${API_BASE_URL}/projects.php?t=${Date.now()}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch project details");

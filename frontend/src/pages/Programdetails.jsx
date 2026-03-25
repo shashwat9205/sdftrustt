@@ -32,7 +32,7 @@ const ProgramDetails = () => {
     const fetchProgram = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/programs.php`,
+          `${API_BASE_URL}/programs.php?t=${Date.now()}`,
         );
 
         if (!response.ok) {

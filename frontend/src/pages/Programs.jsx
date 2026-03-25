@@ -22,7 +22,7 @@ const Programs = () => {
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/programs.php`);
+        const response = await fetch(`${API_BASE_URL}/programs.php?t=${Date.now()}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch programs");

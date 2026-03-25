@@ -4,7 +4,7 @@ import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import Herosection from "../components/Herosection";
 import Testimonials from "./Testimonials";
 
-const PROGRAMS_API_URL = `${API_BASE_URL}/programs.php`;
+const PROGRAMS_API_URL = `${API_BASE_URL}/programs.php?t=` + Date.now();
 const SUBSCRIBE_API_URL = `${API_BASE_URL}/subscribe.php`;
 
 const makeImageUrl = (path) => {
