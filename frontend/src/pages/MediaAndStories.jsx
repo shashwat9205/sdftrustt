@@ -40,7 +40,7 @@ const MediaAndStories = () => {
   useEffect(() => {
     const fetchMedia = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/media.php`);
+        const response = await fetch(`${API_BASE_URL}/media.php?t=${Date.now()}`);
         const data = await response.json();
         
         if (data.status === 'success') {
@@ -63,7 +63,7 @@ const MediaAndStories = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/videos.php`);
+        const response = await fetch(`${API_BASE_URL}/videos.php?t=${Date.now()}`);
         const data = await response.json();
         
         if (data.status === 'success') {
