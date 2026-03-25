@@ -68,7 +68,7 @@
 
 
 import { useEffect, useRef, useState } from "react";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
 function Testimonials() { // Removed props, we fetch inside now
   const [testimonials, setTestimonials] = useState([]);
@@ -76,7 +76,7 @@ function Testimonials() { // Removed props, we fetch inside now
 
   // 1. Fetch data from PHP
   useEffect(() => {
-    fetch(`${API_BASE_URL}/testimonial.php`)
+    fetch(`${API_BASE_URL}/testimonial.php?t=${Date.now()}`)
       .then(res => res.json())
       .then(data => setTestimonials(data))
       .catch(err => console.error("Error loading stories:", err));
@@ -107,19 +107,27 @@ function Testimonials() { // Removed props, we fetch inside now
       <div className="max-w-7xl mx-auto px-4 text-center">
         <h2 className="text-3xl font-serif mb-10">Stories of Impact</h2>
         <div ref={scrollRef} className="flex gap-6 overflow-x-auto scrollbar-hide pb-8">
-          {testimonials.map((item, index) => (
-            <div key={index} className="min-w-75 bg-gray-100 p-6 rounded-2xl flex gap-4 text-left">
-              <img 
-                src={item.image || 'https://via.placeholder.com/150'} 
-                className="w-16 h-16 rounded-full object-cover shrink-0" 
-              />
-              <div>
-                <p className="text-sm italic mb-2">"{item.message}"</p>
-                <h4 className="font-bold text-sm">{item.name}</h4>
-                <p className="text-xs text-gray-500">{item.title}</p>
+          {testimonials.map((item, index) => {
+            let imgSrc = item.image;
+            if (imgSrc && !imgSrc.startsWith("http")) {
+              imgSrc = `${ADMIN_BASE_URL}${imgSrc}`;
+            }
+            if (!imgSrc) imgSrc = 'https://via.placeholder.com/150';
+
+            return (
+              <div key={index} className="min-w-75 bg-gray-100 p-6 rounded-2xl flex gap-4 text-left">
+                <img 
+                  src={imgSrc} 
+                  className="w-16 h-16 rounded-full object-cover shrink-0" 
+                />
+                <div>
+                  <p className="text-sm italic mb-2">"{item.message}"</p>
+                  <h4 className="font-bold text-sm">{item.name}</h4>
+                  <p className="text-xs text-gray-500">{item.title}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
