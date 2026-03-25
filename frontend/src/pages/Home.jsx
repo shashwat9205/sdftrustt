@@ -210,6 +210,7 @@ const Home = () => {
                     <p className="text-gray-500 text-sm mb-6 grow">
                       {card.info}
                     </p>
+                    
                   </div>
                 </div>
               ))}
