@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from '../config';
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -17,7 +18,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch('http://localhost/backend/api/projects.php');
+        const response = await fetch(`${API_BASE_URL}/projects.php`);
         const data = await response.json();
         
         if (data.status === 'success') {

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { API_BASE_URL } from "../config";
 import QRCode from "react-qr-code";
 
 export default function DonationForm() {
@@ -36,12 +37,9 @@ export default function DonationForm() {
   const payeeName = "SDF Trust";
   const transactionNote = "Donation for children support";
 
-  const CREATE_DONATION_API =
-    "http://localhost/backend/api/create-donation.php";
-  const CHECK_STATUS_API =
-    "http://localhost/backend/api/check-payment-status.php";
-  const EXPIRE_PAYMENT_API =
-    "http://localhost/backend/api/expire-payment.php";
+  const CREATE_DONATION_API = `${API_BASE_URL}/create-donation.php`;
+  const CHECK_STATUS_API = `${API_BASE_URL}/check-payment-status.php`;
+  const EXPIRE_PAYMENT_API = `${API_BASE_URL}/expire-payment.php`;
 
   const createUpiUrl = ({ upiId, payeeName, amount, note, transactionId }) => {
     const params = new URLSearchParams({

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
-const BASE_URL = "http://localhost/backend/admin/";
+const BASE_URL = ADMIN_BASE_URL;
 
 const makeImageUrl = (path) => {
   if (!path) {
@@ -29,9 +30,7 @@ const ProjectDetails = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const response = await fetch(
-          "http://localhost/backend/api/projects.php"
-        );
+        const response = await fetch(`${API_BASE_URL}/projects.php`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch project details");

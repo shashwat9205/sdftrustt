@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config";
 import { useLocation } from "react-router-dom";
 
 const Publications = () => {
@@ -21,7 +22,7 @@ const Publications = () => {
   useEffect(() => {
     const fetchPublications = async () => {
       try {
-        const response = await fetch("http://localhost/backend/api/publications.php");
+        const response = await fetch(`${API_BASE_URL}/publications.php`);
         if (!response.ok) {
           throw new Error("Failed to fetch publications");
         }

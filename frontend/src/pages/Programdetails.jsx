@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
-const BASE_URL = "http://localhost/backend/admin/";
+const BASE_URL = ADMIN_BASE_URL;
 
 const makeImageUrl = (path) => {
   if (!path) {
@@ -31,7 +32,7 @@ const ProgramDetails = () => {
     const fetchProgram = async () => {
       try {
         const response = await fetch(
-          "http://localhost/backend/api/programs.php",
+          `${API_BASE_URL}/programs.php`,
         );
 
         if (!response.ok) {
