@@ -23,7 +23,7 @@ const Contact = () => {
 
     try {
       // In production, point to actual PHP server
-      const response = await fetch(`${API_BASE_URL}/contact.php`, {
+      const response = await fetch(`${API_BASE_URL}/submit-contact.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
