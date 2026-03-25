@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import { useLocation } from "react-router-dom";
 
 const Publications = () => {
@@ -7,6 +7,12 @@ const Publications = () => {
   const [publications, setPublications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const getFullUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    return `${ADMIN_BASE_URL}${path}`;
+  };
 
   useEffect(() => {
     if (location.hash) {
@@ -22,7 +28,7 @@ const Publications = () => {
   useEffect(() => {
     const fetchPublications = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/publications.php`);
+        const response = await fetch(`${API_BASE_URL}/publications.php?t=${Date.now()}`);
         if (!response.ok) {
           throw new Error("Failed to fetch publications");
         }
@@ -86,7 +92,7 @@ const Publications = () => {
           {reports.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {reports.map((report) => (
-              <a href={report.file_url} target="_blank" rel="noreferrer" key={report.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+              <a href={getFullUrl(report.file_url)} target="_blank" rel="noreferrer" key={report.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
                  <div className="flex items-center gap-4">
                    <div className="w-12 h-12 bg-red-50 text-red-500 rounded flex items-center justify-center font-bold">PDF</div>
                    <div>
@@ -114,13 +120,13 @@ const Publications = () => {
              {caseStudies.map((study) => (
                <div key={study.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:-translate-y-1 transition-transform flex flex-col">
                   <div className="h-40 bg-gray-200">
-                    <img src={study.image_url || 'https://images.unsplash.com/photo-1544027993-37dbddc92582?q=80&w=400&auto=format&fit=crop'} alt={study.title} className="w-full h-full object-cover" />
+                    <img src={getFullUrl(study.image_url) || 'https://images.unsplash.com/photo-1544027993-37dbddc92582?q=80&w=400&auto=format&fit=crop'} alt={study.title} className="w-full h-full object-cover" />
                   </div>
                   <div className="p-6 flex-1 flex flex-col">
                     <span className="text-xs font-bold text-accent uppercase tracking-wider mb-2 block">{study.category}</span>
                     <h3 className="font-bold text-text-primary mb-4 flex-1">{study.title}</h3>
                     {study.file_url ? (
-                        <a href={study.file_url} target="_blank" rel="noreferrer" className="text-primary hover:text-[#5a6425] text-sm font-bold flex items-center gap-1 mt-auto">Read Study <span className="text-lg">→</span></a>
+                        <a href={getFullUrl(study.file_url)} target="_blank" rel="noreferrer" className="text-primary hover:text-[#5a6425] text-sm font-bold flex items-center gap-1 mt-auto">Read Study <span className="text-lg">→</span></a>
                     ) : null}
                   </div>
                </div>
@@ -141,7 +147,7 @@ const Publications = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
              {galleries.map((gallery) => (
                <div key={gallery.id} className="aspect-square bg-gray-200 rounded-lg overflow-hidden group cursor-pointer relative">
-                 <img src={gallery.image_url} alt="Gallery" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                 <img src={getFullUrl(gallery.image_url)} alt="Gallery" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                  <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-center justify-center">
                     <span className="text-white opacity-0 group-hover:opacity-100 text-3xl transition-opacity">👁️</span>
                  </div>
