@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
-const API_URL = `${API_BASE_URL}/projects.php`;
+const API_URL = `${API_BASE_URL}/projects.php?t=` + Date.now();
 
 const makeImageUrl = (path) => {
   if (!path) return "https://via.placeholder.com/600x300?text=No+Image";
