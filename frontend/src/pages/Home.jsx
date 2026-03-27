@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import Herosection from "../components/Herosection";
 import Testimonials from "./Testimonials";
+import MapSection from "../components/MapSection";
 
 const PROGRAMS_API_URL = `${API_BASE_URL}/programs.php?t=` + Date.now();
 const SUBSCRIBE_API_URL = `${API_BASE_URL}/subscribe.php`;
@@ -396,6 +397,55 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+
+      <section className="py-16 bg-bg-color">
+  <div className="max-w-7xl mx-auto px-4">
+
+    <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
+      Projects Across India
+    </h2>
+
+    {/* 🔥 MAIN LAYOUT */}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+      {/* 🗺️ MAP (LEFT - bigger) */}
+      <div className="lg:col-span-2  p-4 rounded-xl ">
+        <MapSection />
+      </div>
+
+      {/* 📊 IMPACT (RIGHT) */}
+      <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8">
+        <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
+          <span className="text-2xl mr-2">📊</span> Impact Snapshot
+        </h3>
+
+        <ul className="space-y-6">
+          <li className="border-b pb-4">
+            <div className="text-3xl font-bold text-primary mb-1">12</div>
+            <div className="text-sm text-gray-600 uppercase tracking-wide">States Covered</div>
+          </li>
+
+          <li className="border-b pb-4">
+            <div className="text-3xl font-bold text-secondary mb-1">45</div>
+            <div className="text-sm text-gray-600 uppercase tracking-wide">Districts Operated In</div>
+          </li>
+
+          <li className="border-b pb-4">
+            <div className="text-3xl font-bold text-accent mb-1">15+</div>
+            <div className="text-sm text-gray-600 uppercase tracking-wide">Active Major Projects</div>
+          </li>
+
+          <li>
+            <div className="text-3xl font-bold text-primary mb-1">2M+</div>
+            <div className="text-sm text-gray-600 uppercase tracking-wide">Beneficiaries Reached</div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
 
       <section className="py-10 bg-primary/10 border-t border-primary/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

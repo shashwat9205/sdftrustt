@@ -40,3 +40,29 @@
 .read-the-docs {
   color: #888;
 }
+
+.custom-tooltip {
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  max-width: 220px;
+}
+
+.custom-tooltip ul {
+  padding-left: 15px;
+  margin: 5px 0 0;
+}
+
+.custom-tooltip li {
+  font-size: 11px;
+}
+
+.leaflet-interactive {
+  transition: all 0.25s ease;
+}
+
+#map {
+  background: white;
+}
