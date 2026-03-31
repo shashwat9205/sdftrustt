@@ -64,7 +64,7 @@ const Home = () => {
     offset: ["start end", "center center"],
   });
 
-  const focusMaxWidth = useTransform(focusScrollY, [0, 1], ["100%", "95%"]);
+  const focusMaxWidth = useTransform(focusScrollY, [0, 1], ["100%", "80%"]);
   const focusBorderRadius = useTransform(focusScrollY, [0, 1], ["0px", "80px"]);
 
   useEffect(() => {
