@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import Herosection from "../components/Herosection";
 import Testimonials from "./Testimonials";
@@ -55,7 +55,8 @@ const Home = () => {
   });
 
   const mapScale = useTransform(scrollYProgress, [0, 1], [0.7, 1]);
-  const mapClipPath = useTransform(scrollYProgress, [0, 1], ["circle(20% at 50% 50%)", "circle(100% at 50% 50%)"]);
+  const mapClipPercentage = useTransform(scrollYProgress, [0, 1], [35, 100]);
+  const mapClipPath = useMotionTemplate`circle(${mapClipPercentage}% at 50% 50%)`;
 
   // Focus Areas Animation hooks
   const focusRef = useRef(null);
@@ -483,6 +484,7 @@ const Home = () => {
               style={{
                 scale: mapScale,
                 clipPath: mapClipPath,
+                WebkitClipPath: mapClipPath, // Safari support
                 transformOrigin: "center center"
               }}
               className="lg:col-span-2 p-4 rounded-xl"
