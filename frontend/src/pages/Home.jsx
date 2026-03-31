@@ -64,8 +64,8 @@ const Home = () => {
     offset: ["start end", "center center"],
   });
 
-  const focusMaxWidth = useTransform(focusScrollY, [0, 1], ["100%", "1280px"]);
-  const focusBorderRadius = useTransform(focusScrollY, [0, 1], ["0px", "100px"]);
+  const focusMaxWidth = useTransform(focusScrollY, [0, 1], ["100%", "95%"]);
+  const focusBorderRadius = useTransform(focusScrollY, [0, 1], ["0px", "80px"]);
 
   useEffect(() => {
     const fetchPrograms = async () => {
