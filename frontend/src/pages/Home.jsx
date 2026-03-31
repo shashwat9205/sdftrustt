@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import Herosection from "../components/Herosection";
 import Testimonials from "./Testimonials";
@@ -46,6 +46,16 @@ const Home = () => {
   const [programsList, setProgramsList] = useState([]);
   const [programsLoading, setProgramsLoading] = useState(true);
   const [programsError, setProgramsError] = useState("");
+
+  // Map Animation hooks
+  const mapRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: mapRef,
+    offset: ["start 95%", "center center"],
+  });
+
+  const mapScale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const mapOpacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -215,7 +225,7 @@ const Home = () => {
                     <p className="text-gray-500 text-sm mb-6 grow">
                       {card.info}
                     </p>
-                    
+
                   </div>
                 </div>
               ))}
@@ -224,7 +234,7 @@ const Home = () => {
         </div>
       </section>
 
-     <section className="py-16 md:py-24 bg-bg-color relative px-4 sm:px-6 lg:px-8">
+      <section className="py-16 md:py-24 bg-bg-color relative px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ borderRadius: "0px" }}
           whileInView={{ borderRadius: "100px" }}
@@ -320,7 +330,7 @@ const Home = () => {
 
 
 
-      <ProjectSlider/>
+      <ProjectSlider />
 
       <section className="py-10 bg-bg-color">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -449,7 +459,7 @@ const Home = () => {
       </section>
 
 
-     <section className="py-16 bg-bg-color">
+      <section className="py-16 bg-bg-color">
         <div className="max-w-7xl mx-auto px-4">
 
           <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
@@ -461,11 +471,12 @@ const Home = () => {
 
             {/* 🗺️ MAP (LEFT - bigger) */}
             <motion.div
-              initial={{ scale: 0.4, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1.2, type: "spring", bounce: 0.4 }}
-              viewport={{ once: false, amount: 0.1 }}
-              style={{ transformOrigin: "center center" }}
+              ref={mapRef}
+              style={{ 
+                scale: mapScale, 
+                opacity: mapOpacity, 
+                transformOrigin: "center center" 
+              }}
               className="lg:col-span-2 p-4 rounded-xl"
             >
               <MapSection />
@@ -507,7 +518,7 @@ const Home = () => {
 
 
 
-      <PartnersSection/>
+      <PartnersSection />
 
 
 
@@ -550,11 +561,10 @@ const Home = () => {
 
           {message.text && (
             <div
-              className={`max-w-lg mx-auto mt-4 p-3 rounded-lg text-sm font-medium ${
-                message.type === "success"
+              className={`max-w-lg mx-auto mt-4 p-3 rounded-lg text-sm font-medium ${message.type === "success"
                   ? "bg-green-100 text-green-800 border border-green-200"
                   : "bg-red-100 text-red-800 border border-red-200"
-              }`}
+                }`}
             >
               {message.text}
             </div>
