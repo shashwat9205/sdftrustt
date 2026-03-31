@@ -57,6 +57,16 @@ const Home = () => {
   const mapScale = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
   const mapOpacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
 
+  // Focus Areas Animation hooks
+  const focusRef = useRef(null);
+  const { scrollYProgress: focusScrollY } = useScroll({
+    target: focusRef,
+    offset: ["start end", "center center"],
+  });
+
+  const focusMaxWidth = useTransform(focusScrollY, [0, 1], ["100%", "1280px"]);
+  const focusBorderRadius = useTransform(focusScrollY, [0, 1], ["0px", "100px"]);
+
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
@@ -234,13 +244,10 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-bg-color relative px-4 sm:px-6 lg:px-8">
+      <section ref={focusRef} className="py-16 md:py-24 bg-bg-color relative">
         <motion.div
-          initial={{ borderRadius: "0px" }}
-          whileInView={{ borderRadius: "100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: false, amount: 0.2 }}
-          className="max-w-7xl mx-auto bg-gray-900 text-center py-16 px-6 sm:px-12 lg:px-16 shadow-xl relative overflow-hidden group"
+          style={{ maxWidth: focusMaxWidth, borderRadius: focusBorderRadius }}
+          className="mx-auto bg-gray-900 text-center py-16 px-6 sm:px-12 lg:px-16 shadow-xl relative overflow-hidden group w-full"
         >
 
           <motion.h2
