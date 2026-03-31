@@ -1,0 +1,173 @@
+import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config";
+
+const PROJECTS_API = `${API_BASE_URL}/projects.php`;
+
+const ProjectSlider = () => {
+  const [projects, setProjects] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [animate, setAnimate] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  // 🔥 FETCH PROJECTS
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await fetch(PROJECTS_API);
+        const data = await res.json();
+
+        if (data.status === "success") {
+          setProjects(data.data);
+        }
+      } catch (err) {
+        console.error("API Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // 🔥 AUTO SLIDE
+  useEffect(() => {
+    if (!projects || projects.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setAnimate(false);
+
+      setTimeout(() => {
+        setIndex((prev) => (prev + 1) % projects.length);
+        setAnimate(true);
+      }, 500);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [projects]);
+
+  // 🔥 VIDEO FORMATTER
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+
+    if (url.includes("youtube.com/embed/")) return url;
+
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+
+    if (match && match[2].length === 11) {
+      return `https://www.youtube.com/embed/${match[2]}`;
+    }
+
+    return null;
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center py-20 bg-[#F3EFE4]">
+        <p className="text-xl">Loading projects...</p>
+      </div>
+    );
+  }
+
+  if (!projects.length) return null;
+
+  const project = projects[index];
+  const videoSrc = getEmbedUrl(project.image_url || project.youtube);
+
+  return (
+    <section
+      className="py-20 relative overflow-hidden bg-cover bg-center"
+      style={{
+        backgroundImage: "url('/banner/ngo-bg.png')", // ✅ FIXED
+      }}
+    >
+      {/* OVERLAY */}
+      <div className="absolute inset-0 bg-black/60"></div>
+
+      <div className="relative max-w-7xl mx-auto px-4">
+
+        <h2 className="text-4xl font-serif text-center mb-12 text-white">
+          Our Projects
+        </h2>
+
+        {/* SLIDER */}
+        <div
+          className={`bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden grid md:grid-cols-2 min-h-112.5 transition-all duration-700 ${
+            animate
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 -translate-x-10"
+          }`}
+        >
+
+          {/* LEFT */}
+          <div className="p-8 md:p-12 flex flex-col justify-center">
+            <span className="text-sm font-bold text-[#6a752b] uppercase mb-3">
+              {project.category}
+            </span>
+
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">
+              {project.title}
+            </h3>
+
+            <p className="text-gray-600 mb-6 line-clamp-4">
+              {project.description}
+            </p>
+
+            <div className="text-gray-500 mb-6">
+              📍 {project.location}
+            </div>
+
+            <a
+              href={`/projectdetails/${project.slug}`}
+              className="inline-block bg-[#6a752b] text-white px-8 py-3 rounded-full"
+            >
+              View Details →
+            </a>
+          </div>
+
+          {/* RIGHT */}
+          <div className="relative h-75 md:h-auto bg-black">
+            {videoSrc ? (
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={videoSrc}
+                title={project.title}
+                allowFullScreen
+              />
+            ) : (
+              <img
+                src={project.image_url || "/banner/fallback.jpg"} // ✅ fallback
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+            )}
+          </div>
+
+        </div>
+
+        {/* DOTS */}
+        <div className="flex justify-center mt-8 gap-2">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setAnimate(false);
+                setTimeout(() => {
+                  setIndex(i);
+                  setAnimate(true);
+                }, 100);
+              }}
+              className={`h-2 rounded-full ${
+                index === i ? "w-8 bg-white" : "w-2 bg-gray-400"
+              }`}
+            />
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+export default ProjectSlider;

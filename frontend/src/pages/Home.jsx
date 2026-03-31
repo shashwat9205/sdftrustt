@@ -6,6 +6,8 @@ import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import Herosection from "../components/Herosection";
 import Testimonials from "./Testimonials";
 import MapSection from "../components/MapSection";
+import PartnersSection from "../components/Partners";
+import ProjectSlider from "../components/ProjectSlider";
 
 const PROGRAMS_API_URL = `${API_BASE_URL}/programs.php?t=` + Date.now();
 const SUBSCRIBE_API_URL = `${API_BASE_URL}/subscribe.php`;
@@ -337,6 +339,10 @@ const Home = () => {
         </motion.div>
       </section>
 
+
+
+      <ProjectSlider/>
+
       <section className="py-10 bg-bg-color">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-serif text-text-primary mb-12">
@@ -512,6 +518,17 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+
+
+
+      <PartnersSection/>
+
+
+
+
+
+
 
       <section className="py-10 bg-primary/10 border-t border-primary/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
-const API_URL = `${API_BASE_URL}/projects.php?t=` + Date.now();
+const API_URL = `${API_BASE_URL}/projects.php`;
 
+// Handle image URL
+// eslint-disable-next-line no-unused-vars
 const makeImageUrl = (path) => {
   if (!path) return "https://via.placeholder.com/600x300?text=No+Image";
 
@@ -18,106 +20,71 @@ const makeImageUrl = (path) => {
   return `${ADMIN_BASE_URL}${path.replace(/^\/+/, "")}`;
 };
 
+// Extract YouTube Video ID
+const getYoutubeId = (url) => {
+  try {
+    const parsed = new URL(url);
+
+    if (parsed.hostname.includes("youtube.com")) {
+      return parsed.searchParams.get("v");
+    }
+
+    if (parsed.hostname.includes("youtu.be")) {
+      return parsed.pathname.slice(1);
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 function Herosection() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const scrollRef = useRef(null);
+  const [videoId, setVideoId] = useState(null);
 
+  // Fetch API for YouTube video
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchVideo = async () => {
       try {
-        const response = await fetch(API_URL);
+        const res = await fetch(API_URL);
+        const data = await res.json();
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch projects");
+        const firstProject = Array.isArray(data)
+          ? data[0]
+          : data?.data?.[0];
+
+        if (firstProject?.youtube) {
+          const id = getYoutubeId(firstProject.youtube);
+          setVideoId(id);
         }
-
-        const data = await response.json();
-
-        const rawProjects = Array.isArray(data)
-          ? data
-          : Array.isArray(data.data)
-          ? data.data
-          : [];
-
-        const normalizedProjects = rawProjects.map((project, index) => ({
-          id: project.id || index + 1,
-          title: project.title || "Untitled Project",
-          para:
-            project.message ||
-            project.description ||
-            "No project description available.",
-          date: project.date || project.created_at || "",
-          img: makeImageUrl(project.image || project.image_url),
-          link: project.link || `/projectdetails/${project.slug || project.id || index + 1}`,
-        }));
-
-        setProjects(normalizedProjects);
       } catch (err) {
-        console.error("Project fetch error:", err);
-        setError(err.message || "Failed to load projects");
-      } finally {
-        setLoading(false);
+        console.error("Video fetch error:", err);
       }
     };
 
-    fetchProjects();
+    fetchVideo();
   }, []);
 
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container || projects.length === 0) return;
-
-    let animationFrame;
-    let isPaused = false;
-    const speed = 0.5;
-
-    const handleMouseEnter = () => {
-      isPaused = true;
-    };
-
-    const handleMouseLeave = () => {
-      isPaused = false;
-    };
-
-    container.addEventListener("mouseenter", handleMouseEnter);
-    container.addEventListener("mouseleave", handleMouseLeave);
-
-    const scroll = () => {
-      if (!container) return;
-
-      if (!isPaused) {
-        container.scrollTop += speed;
-
-        if (container.scrollTop >= container.scrollHeight / 2) {
-          container.scrollTop = 0;
-        }
-      }
-
-      animationFrame = requestAnimationFrame(scroll);
-    };
-
-    animationFrame = requestAnimationFrame(scroll);
-
-    return () => {
-      if (animationFrame) cancelAnimationFrame(animationFrame);
-      container.removeEventListener("mouseenter", handleMouseEnter);
-      container.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [projects]);
-
   return (
-    <section className="relative bg-[#F9F6EA] overflow-hidden pb-10">
+    <section className="relative bg-[#F9F6EA] overflow-hidden pb-20 md:pb-28">
+
+      {/* VIDEO BACKGROUND */}
       <div className="absolute inset-0 z-0">
-        <div
-          className="w-full h-full bg-cover bg-center"
-          style={{ backgroundImage: "url('/banner/hero.png')" }}
-        ></div>
-        <div className="absolute inset-0 bg-black/30"></div>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src="/banner/hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      <div className="relative z-10 w-[95%] mx-auto min-h-150 flex items-center">
+      <div className="relative z-10 w-[95%] mx-auto min-h-150 md:min-h-175 flex items-center">
+
+        {/* LEFT CONTENT */}
         <div className="max-w-2xl text-white pl-6 md:pl-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             <span className="bg-clip-text text-transparent bg-linear-to-r from-yellow-400 to-green-500">
@@ -139,61 +106,50 @@ function Herosection() {
           </Link>
         </div>
 
-        <div className="hidden lg:block absolute right-6 top-1/2 -translate-y-1/2 w-75">
-          <div className="border border-white/30 rounded-2xl p-2 backdrop-blur-md">
-            <h3 className="text-white font-bold mb-3">Incoming Projects</h3>
+        {/* 🔥 RIGHT SIDE YOUTUBE VIDEO */}
+        <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 w-100">
+          <div className="w-full bg-white/10 backdrop-blur-md border border-white/30 rounded-2xl p-3 shadow-lg">
 
-            {loading ? (
-              <div className="text-white text-sm p-3">Loading projects...</div>
-            ) : error ? (
-              <div className="text-red-200 text-sm p-3">{error}</div>
-            ) : projects.length === 0 ? (
-              <div className="text-white text-sm p-3">No projects found.</div>
-            ) : (
-              <div
-                ref={scrollRef}
-                className="h-125 overflow-hidden space-y-4 p-2"
+            <h3 className="text-white font-bold mb-3">Featured Video</h3>
+
+            {/* VIDEO */}
+            <div className="rounded-xl overflow-hidden">
+              {videoId ? (
+                <iframe
+                  className="w-full h-55"
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title="YouTube video"
+                  frameBorder="0"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <div className="text-white text-center py-10">
+                  No video available
+                </div>
+              )}
+            </div>
+
+            {/* BUTTON */}
+            {videoId && (
+              <a
+                href={`https://www.youtube.com/watch?v=${videoId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-3 text-center bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
               >
-                {[...projects, ...projects].map((project, index) => (
-                  <a
-                    key={`${project.id}-${index}`}
-                    href={project.link}
-                    className="block bg-white rounded-lg overflow-hidden hover:shadow-lg transition group"
-                  >
-                    <img
-                      src={project.img}
-                      alt={project.title}
-                      className="w-full h-28 object-cover group-hover:scale-105 transition"
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          "https://via.placeholder.com/600x300?text=Image+Not+Found";
-                      }}
-                    />
-
-                    <div className="p-2">
-                      <h4 className="text-xs font-semibold">{project.title}</h4>
-
-                      {project.date && (
-                        <p className="text-[10px] text-gray-500">
-                          {new Date(project.date).toLocaleDateString()}
-                        </p>
-                      )}
-
-                      <p className="text-[10px] text-gray-600 line-clamp-2">
-                        {project.para}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
+                Watch on YouTube →
+              </a>
             )}
           </div>
         </div>
+
       </div>
 
-      <div className="absolute bottom-0 w-full overflow-hidden leading-none z-10">
+      {/* SVG */}
+      <div className="absolute -bottom-6 md:-bottom-10 w-full overflow-hidden leading-none z-10">
         <svg
-          className="w-full h-20 md:h-18 lg:h-36"
+          className="w-full h-24 md:h-32 lg:h-40"
           viewBox="0 0 1440 320"
           preserveAspectRatio="none"
         >
