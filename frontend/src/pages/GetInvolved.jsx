@@ -2,6 +2,29 @@ import { useEffect, useState } from "react";
 import { useLocation , Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
+const staticFunds = [
+  {
+    id: 1,
+    title: "Community Development Fund",
+    description: "Support our grassroots initiatives empowering local communities and restoring critical rural infrastructure.",
+    location: "Pan-India",
+    donate_link: "/donate"
+  },
+  {
+    id: 2,
+    title: "Emergency Water Relief Fund",
+    description: "Provide immediate assistance to drought-affected regions by funding water pipelines and resources.",
+    location: "Affected Regions",
+    donate_link: "/donate"
+  },
+  {
+    id: 3,
+    title: "Women's Education Endowment",
+    description: "Fund full-ride scholarships for girls in marginalized communities to pursue vocational and higher education.",
+    location: "Urban & Rural Centers",
+    donate_link: "/donate"
+  }
+];
 
 const GetInvolved = () => {
 
@@ -108,6 +131,28 @@ const GetInvolved = () => {
              ) : (
                <div className="p-6 text-center text-gray-500">There are no open positions at this time.</div>
              )}
+           </div>
+        </section>
+
+        {/* Funds */}
+        <section id="funds" className="mt-32 scroll-mt-32">
+           <div className="text-center mb-12">
+             <span className="text-4xl mb-4 block animate-float">🌱</span>
+             <h2 className="text-3xl font-serif text-text-primary mb-4">Active Funds</h2>
+             <p className="text-gray-500 max-w-2xl mx-auto">Direct your contribution exactly where it matters. Choose a specific fund to support the causes you care about most.</p>
+           </div>
+           
+           <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden max-w-4xl mx-auto">
+             {staticFunds.map(fund => (
+               <div key={fund.id} className="p-6 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 hover:bg-gray-50 transition-colors">
+                 <div className="flex-1">
+                    <h3 className="text-xl font-bold text-primary mb-1">{fund.title}</h3>
+                    <p className="text-gray-500 text-sm flex items-center gap-2 mb-2"><span className="text-base">📍</span> {fund.location}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{fund.description}</p>
+                 </div>
+                 <a href={fund.donate_link} className="shrink-0 border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-full font-bold transition-all hover:shadow-md">Contribute</a>
+               </div>
+             ))}
            </div>
         </section>
 
