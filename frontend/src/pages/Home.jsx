@@ -56,11 +56,20 @@ const Home = () => {
     offset: ["start 60%", "center center"],
   });
 
-  // Start scaled down at 50% (0.5), zoom into 100% (1)
-  const mapScale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
+  // 1. Starts scaling at 0.5, grows to 0.8 while circular, then finishes at 1
+  const mapScale = useTransform(
+    scrollYProgress, 
+    [0.4, 0.85, 1], 
+    [0.5, 0.8, 1]
+  );
   
-  // Start with a 15% circle, expand to 150% (to fully cover the corners of the rectangle)
-  const mapClipPercentage = useTransform(scrollYProgress, [0, 1], [15, 150]);
+  // 2. Grows to 45% (staying a perfect circle), then rapidly expands to 150% to fill the rectangle
+  const mapClipPercentage = useTransform(
+    scrollYProgress, 
+    [0.4, 0.85, 1], 
+    [15, 45, 150]
+  );
+  
   const mapClipPath = useMotionTemplate`circle(${mapClipPercentage}% at 50% 50%)`;
 
   // Focus Areas Animation hooks
