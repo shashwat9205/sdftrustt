@@ -479,18 +479,22 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
             {/* 🗺️ MAP (LEFT - bigger) */}
-            <motion.div
-              ref={mapRef}
-              style={{
-                scale: mapScale,
-                clipPath: mapClipPath,
-                WebkitClipPath: mapClipPath, // Safari support
-                transformOrigin: "center center"
-              }}
-              className="lg:col-span-2 p-4 rounded-xl"
-            >
-              <MapSection />
-            </motion.div>
+            <div ref={mapRef} className="lg:col-span-2 relative">
+              <motion.div
+                style={{
+                  scale: mapScale,
+                  clipPath: mapClipPath,
+                  WebkitClipPath: mapClipPath, // Safari support
+                  transformOrigin: "center center",
+                  backfaceVisibility: "hidden"
+                }}
+                className="w-full h-full p-4 rounded-xl overflow-hidden relative z-10"
+              >
+                <div style={{ transform: "translateZ(0)" }} className="w-full h-full">
+                  <MapSection />
+                </div>
+              </motion.div>
+            </div>
 
             {/* 📊 IMPACT (RIGHT) */}
             <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8">
