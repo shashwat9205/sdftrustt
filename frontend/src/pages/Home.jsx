@@ -391,12 +391,18 @@ const Home = () => {
 
       <Testimonials />
 
-      <section className="py-10 bg-[#E9EFE1] relative">
+      <section 
+        className="py-20 relative bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
+      >
+        {/* Elegant Dark Overlay */}
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 relative">
-          <h2 className="text-3xl font-serif text-text-primary mb-4">
+          <h2 className="text-4xl font-serif text-white mb-4 drop-shadow-lg">
             Get Involved
           </h2>
-          <p className="text-xl text-gray-700 mb-12">
+          <p className="text-xl text-gray-200 mb-12 drop-shadow-md">
             Join Us in Making a Difference
           </p>
 

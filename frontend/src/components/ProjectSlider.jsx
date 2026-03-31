@@ -77,17 +77,17 @@ const ProjectSlider = () => {
 
   return (
     <section
-      className="py-20 relative overflow-hidden bg-cover bg-center"
+      className="py-24 relative overflow-hidden bg-cover bg-center bg-fixed"
       style={{
-        backgroundImage: "url('/banner/ngo-bg.png')", // ✅ FIXED
+        backgroundImage: "url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')", 
       }}
     >
-      {/* OVERLAY */}
-      <div className="absolute inset-0 bg-black/60"></div>
+      {/* STUNNING GLASS OVERLAY */}
+      <div className="absolute inset-0 bg-linear-to-br from-[#233520]/80 via-black/60 to-[#6a752b]/80 backdrop-blur-[2px]"></div>
 
       <div className="relative max-w-7xl mx-auto px-4">
 
-        <h2 className="text-4xl font-serif text-center mb-12 text-white">
+        <h2 className="text-4xl font-serif text-center mb-16 text-white drop-shadow-xl font-bold tracking-wide">
           Our Projects
         </h2>
 
