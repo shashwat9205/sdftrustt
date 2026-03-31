@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
 const partners = [
-  "about/news4.png",
-  "about/news.png",
-  "about/news1.png",
-  "about/news3.png",
-  "about/news1.png",
-  "about/news3.png",
-  "about/news.png",
-  "about/news4.png",
-  "about/news3.png",
-  "about/news1.png",
-  "about/news4.png",
-  "about/news.png",
+  "about/part3.png",
+  "about/part2.png",
+  "about/part.png",
+  "about/part3.png",
+  "about/part4.png",
+  "about/part3.png",
+  "about/part2.png",
+  "about/part.png",
+  "about/part3.png",
+  "about/part4.png",
+  "about/part.png",
+  "about/part2.png",
 ];
 
 const PartnersSection = () => {
