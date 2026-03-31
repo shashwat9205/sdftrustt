@@ -485,7 +485,9 @@ const Home = () => {
 
             {/* 🗺️ MAP (LEFT - bigger) */}
             {/* 🗺️ MAP (LEFT - bigger) */}
-            <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
+            {/* 🗺️ MAP (LEFT - bigger) */}
+            {/* Notice the bg-gray-900 added below! */}
+            <div ref={mapRef} className="lg:col-span-2 relative h-[600px] md:h-[800px] rounded-xl overflow-hidden bg-gray-900 flex items-center justify-center">
               <motion.div
                 style={{
                   scale: mapScale,
