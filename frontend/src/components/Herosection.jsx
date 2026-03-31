@@ -25,7 +25,7 @@ function Herosection() {
   useEffect(() => {
     const fetchHeroCard = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/hero.php`);
+        const res = await fetch(`${API_BASE_URL}/hero.php?t=${new Date().getTime()}`);
         const result = await res.json();
 
         if (result.status === "success" && result.data) {
