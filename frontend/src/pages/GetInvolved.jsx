@@ -1,11 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation , Link } from "react-router-dom";
+import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
 
 const GetInvolved = () => {
 
   
   const location = useLocation(); // 2. Define location here
+  const [careersList, setCareersList] = useState([]);
+  const [careersLoading, setCareersLoading] = useState(true);
 
   useEffect(() => {
     if (location.hash) {
@@ -17,6 +20,23 @@ const GetInvolved = () => {
       }
     }
   }, [location]);
+
+  useEffect(() => {
+    const fetchCareers = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/careers.php`);
+        const data = await response.json();
+        if (data.status === 'success') {
+          setCareersList(data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch careers:", error);
+      } finally {
+        setCareersLoading(false);
+      }
+    };
+    fetchCareers();
+  }, []);
 
   return (
     <div className="bg-bg-color min-h-screen pb-24">
@@ -70,27 +90,24 @@ const GetInvolved = () => {
            </div>
            
            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden max-w-4xl mx-auto">
-              <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-gray-50 transition-colors">
-                <div>
-                   <h3 className="text-xl font-bold text-primary mb-1">Project Manager - WASH</h3>
-                   <p className="text-gray-500 text-sm flex items-center gap-2"><span className="text-base">📍</span> Remote / Rajasthan • Full-time</p>
-                </div>
-                <button className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 py-2 rounded-full font-bold transition-colors">Apply Now</button>
-              </div>
-              <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-gray-50 transition-colors">
-                <div>
-                   <h3 className="text-xl font-bold text-primary mb-1">Monitoring & Evaluation Officer</h3>
-                   <p className="text-gray-500 text-sm flex items-center gap-2"><span className="text-base">📍</span> Head Office • Full-time</p>
-                </div>
-                <button className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 py-2 rounded-full font-bold transition-colors">Apply Now</button>
-              </div>
-              <div className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-gray-50 transition-colors">
-                <div>
-                   <h3 className="text-xl font-bold text-primary mb-1">Communications Executive</h3>
-                   <p className="text-gray-500 text-sm flex items-center gap-2"><span className="text-base">📍</span> Hybrid • Contract</p>
-                </div>
-                <button className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 py-2 rounded-full font-bold transition-colors">Apply Now</button>
-              </div>
+             {careersLoading ? (
+               <div className="p-6 text-center text-gray-500">Loading career opportunities...</div>
+             ) : careersList.length > 0 ? (
+               careersList.map(career => (
+                 <div key={career.id} className="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-gray-50 transition-colors">
+                   <div>
+                      <h3 className="text-xl font-bold text-primary mb-1">{career.title}</h3>
+                      <p className="text-gray-500 text-sm flex items-center gap-2"><span className="text-base">📍</span> {career.location}</p>
+                      {career.pdf_url && (
+                        <a href={`${ADMIN_BASE_URL}${career.pdf_url.startsWith('/') ? career.pdf_url : '/' + career.pdf_url}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm font-medium mt-1 inline-block"><span className="mr-1">📄</span> View Job Description</a>
+                      )}
+                   </div>
+                   <a href={career.apply_link} target="_blank" rel="noopener noreferrer" className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-6 py-2 rounded-full font-bold transition-colors">Apply Now</a>
+                 </div>
+               ))
+             ) : (
+               <div className="p-6 text-center text-gray-500">There are no open positions at this time.</div>
+             )}
            </div>
         </section>
 
