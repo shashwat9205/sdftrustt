@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
-const API_URL = `${API_BASE_URL}/projects.php`;
-
 // Handle image URL
-// eslint-disable-next-line no-unused-vars
+
 const makeImageUrl = (path) => {
   if (!path) return "https://via.placeholder.com/600x300?text=No+Image";
 
@@ -20,49 +18,25 @@ const makeImageUrl = (path) => {
   return `${ADMIN_BASE_URL}${path.replace(/^\/+/, "")}`;
 };
 
-// Extract YouTube Video ID
-const getYoutubeId = (url) => {
-  try {
-    const parsed = new URL(url);
-
-    if (parsed.hostname.includes("youtube.com")) {
-      return parsed.searchParams.get("v");
-    }
-
-    if (parsed.hostname.includes("youtu.be")) {
-      return parsed.pathname.slice(1);
-    }
-
-    return null;
-  } catch {
-    return null;
-  }
-};
-
 function Herosection() {
-  const [videoId, setVideoId] = useState(null);
+  const [heroCard, setHeroCard] = useState(null);
 
-  // Fetch API for YouTube video
+  // Fetch API for Hero Card
   useEffect(() => {
-    const fetchVideo = async () => {
+    const fetchHeroCard = async () => {
       try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
+        const res = await fetch(`${API_BASE_URL}/hero.php`);
+        const result = await res.json();
 
-        const firstProject = Array.isArray(data)
-          ? data[0]
-          : data?.data?.[0];
-
-        if (firstProject?.youtube) {
-          const id = getYoutubeId(firstProject.youtube);
-          setVideoId(id);
+        if (result.status === "success" && result.data) {
+          setHeroCard(result.data);
         }
       } catch (err) {
-        console.error("Video fetch error:", err);
+        console.error("Hero card fetch error:", err);
       }
     };
 
-    fetchVideo();
+    fetchHeroCard();
   }, []);
 
   return (
@@ -112,28 +86,42 @@ function Herosection() {
 
             <h3 className="text-white font-bold mb-3">Featured Video</h3>
 
-            {/* VIDEO */}
-            <div className="rounded-xl overflow-hidden">
-              {videoId ? (
-                <iframe
-                  className="w-full h-55"
-                  src={`https://www.youtube.com/embed/${videoId}`}
-                  title="YouTube video"
-                  frameBorder="0"
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
-                ></iframe>
+            {/* VIDEO/CARD */}
+            <div className="rounded-xl overflow-hidden relative group">
+              {heroCard ? (
+                <a href={heroCard.youtube_link} target="_blank" rel="noopener noreferrer" className="block w-full h-55 relative">
+                  {/* Thumbnail Image */}
+                  <img
+                    src={makeImageUrl(heroCard.image_url)}
+                    alt={heroCard.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {/* Overlay & Title */}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
+                     <h4 className="text-white font-serif text-lg font-bold leading-tight drop-shadow-md">
+                        {heroCard.title}
+                     </h4>
+                  </div>
+                  {/* Play Icon */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 bg-red-600/90 rounded-full flex items-center justify-center shadow-xl group-hover:bg-red-600 transition-colors backdrop-blur-sm">
+                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </a>
               ) : (
-                <div className="text-white text-center py-10">
-                  No video available
+                <div className="text-white text-center py-10 bg-black/20 rounded-xl h-55 flex items-center justify-center">
+                  <span>No video available</span>
                 </div>
               )}
             </div>
 
             {/* BUTTON */}
-            {videoId && (
+            {heroCard && (
               <a
-                href={`https://www.youtube.com/watch?v=${videoId}`}
+                href={heroCard.youtube_link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block mt-3 text-center bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
