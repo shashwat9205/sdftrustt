@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../config";
+import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
 const PROJECTS_API = `${API_BASE_URL}/projects.php`;
 
@@ -137,7 +137,7 @@ const ProjectSlider = () => {
               />
             ) : (
               <img
-                src={project.image_url || "/banner/fallback.jpg"} // ✅ fallback
+                src={project.image_url ? `${ADMIN_BASE_URL}${project.image_url.replace(/^\/+/, '')}` : "/banner/fallback.jpg"}
                 alt={project.title}
                 className="w-full h-full object-cover"
               />
