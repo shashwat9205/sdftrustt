@@ -54,9 +54,8 @@ const Home = () => {
     offset: ["start 95%", "center center"],
   });
 
-  const mapMaxWidth = useTransform(scrollYProgress, [0, 1], ["85%", "100%"]);
-  const mapBorderRadius = useTransform(scrollYProgress, [0, 1], ["80px", "0px"]);
-  const mapScale = useTransform(scrollYProgress, [0, 1], [0.93, 1]);
+  const mapScale = useTransform(scrollYProgress, [0, 1], [0.2, 1]);
+  const mapOpacity = useTransform(scrollYProgress, [0, 1], [0.2, 1]);
 
   // Focus Areas Animation hooks
   const focusRef = useRef(null);
@@ -468,24 +467,28 @@ const Home = () => {
       </section>
 
 
-      <section ref={mapRef} className="bg-bg-color relative flex justify-center py-8 overflow-hidden w-full">
-        <motion.div
-          style={{ width: "100%", maxWidth: mapMaxWidth, borderRadius: mapBorderRadius, scale: mapScale }}
-          className="bg-white py-16 px-4 sm:px-6 lg:px-8 mx-auto shadow-xl border border-gray-100 relative group"
-        >
-          <div className="max-w-7xl mx-auto">
+      <section className="py-16 bg-bg-color">
+        <div className="max-w-7xl mx-auto px-4">
 
-            <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
-              Projects Across India
-            </h2>
+          <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
+            Projects Across India
+          </h2>
 
-            {/* 🔥 MAIN LAYOUT */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* 🔥 MAIN LAYOUT */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-              {/* 🗺️ MAP (LEFT - bigger) */}
-              <div className="lg:col-span-2 p-4 rounded-xl">
-                <MapSection />
-              </div>
+            {/* 🗺️ MAP (LEFT - bigger) */}
+            <motion.div
+              ref={mapRef}
+              style={{
+                scale: mapScale,
+                opacity: mapOpacity,
+                transformOrigin: "center center"
+              }}
+              className="lg:col-span-2 p-4 rounded-xl"
+            >
+              <MapSection />
+            </motion.div>
 
             {/* 📊 IMPACT (RIGHT) */}
             <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8">
@@ -515,10 +518,9 @@ const Home = () => {
                 </li>
               </ul>
             </div>
-
             </div>
+
           </div>
-        </motion.div>
       </section>
 
 

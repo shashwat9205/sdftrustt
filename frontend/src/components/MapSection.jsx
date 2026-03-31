@@ -70,8 +70,8 @@ const MapSection = () => {
             return {
                 color: "#ffffff",
                 weight: 1.5,
-                fillColor: hasProjects ? "#6a752b" : "#e5e7eb", // Olive green for active, subtle gray for empty
-                fillOpacity: hasProjects ? 0.9 : 0.6,
+                fillColor: hasProjects ? "#576123" : "#d1d5db", // Darker Olive green for active, darker gray for empty
+                fillOpacity: hasProjects ? 0.95 : 0.7,
             };
         }
 
@@ -79,7 +79,7 @@ const MapSection = () => {
             return {
                 color: "#ffffff",
                 weight: 2,
-                fillColor: "#233520", // Deep forest green on hover
+                fillColor: "#1A2718", // Darker Deep forest green on hover
                 fillOpacity: 1,
             };
         }
