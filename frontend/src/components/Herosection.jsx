@@ -102,7 +102,7 @@ function Herosection() {
               <h3 className="text-white font-bold mb-3">Featured Video</h3>
 
               {/* FEATURES VIDEOS CARDS */}
-              <div className="rounded-xl overflow-hidden relative group h-100 md:h-112.5 lg:h-125 w-full flex flex-col bg-black/10">
+              <div className="rounded-xl overflow-hidden relative group h-125 md:h-112.5 lg:h-125 w-full flex flex-col bg-black/10">
                 {heroCards.length > 0 ? (
                   <div className="animate-scroll-up flex flex-col gap-4 w-full absolute top-0 left-0" style={{ padding: '0.75rem' }}>
                     {/* We duplicate the array to allow for a seamless infinite loop */}
