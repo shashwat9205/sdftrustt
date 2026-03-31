@@ -96,7 +96,7 @@ function Herosection() {
           </div>
 
           {/* 🔥 RIGHT SIDE YOUTUBE VIDEO */}
-          <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 w-100">
+          <div className="hidden lg:flex absolute -right-2 lg:-right-4 xl:-right-6 top-1/2 -translate-y-1/2 w-[320px] lg:w-90 xl:w-95">
             <div className="w-full bg-white/10 backdrop-blur-md border border-white/30 rounded-2xl p-3 shadow-lg">
 
               <h3 className="text-white font-bold mb-3">Featured Video</h3>
