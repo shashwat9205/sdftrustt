@@ -220,62 +220,119 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-10 bg-[#F3EFE4] relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-serif text-text-primary mb-12">
-            Our Focus Areas
-          </h2>
+     <section className="py-16 md:py-24 bg-bg-color relative px-4 sm:px-6 lg:px-8">
+        <motion.div 
+          initial={{ borderRadius: "0px" }}
+          whileInView={{ borderRadius: "100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: false, amount: 0.2 }}
+          className="max-w-7xl mx-auto bg-gray-900 text-center py-16 px-6 sm:px-12 lg:px-16 shadow-xl relative overflow-hidden group"
+        >
+          {/* Animated decorative horizontal lines */}
+          <div className="absolute inset-0 pointer-events-none z-1">
+            <motion.div 
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.2, ease: "easeInOut" }}
+              className="absolute top-[12%] left-10 right-10 h-px bg-white/20 origin-left"
+            />
+            <motion.div 
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.4, ease: "easeInOut" }}
+              className="absolute top-[38%] left-10 right-10 h-px bg-white/20 origin-right"
+            />
+            <motion.div 
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 1, delay: 0.6, ease: "easeInOut" }}
+              className="absolute top-[88%] left-10 right-10 h-px bg-white/20 origin-left"
+            />
+          </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            <div className="bg-white p-6 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-center gap-4 justify-center border border-gray-100">
+          <motion.h2 
+            initial={{ y: -20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-3xl font-serif text-white mb-12 relative z-10 inline-block px-4 bg-gray-900"
+          >
+            Our Focus Areas
+          </motion.h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 relative z-10">
+            <motion.div 
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: false }}
+              className="bg-white p-6 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-center gap-4 justify-center border border-gray-100"
+            >
               <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-3xl shadow-sm animate-float">
                 👥
               </div>
-              <div className="text-left">
-                <p className="text-2xl font-bold text-text-primary">40+</p>
+              <div className="text-center md:text-left">
+                <p className="text-2xl font-bold text-gray-900">40+</p>
                 <p className="text-xs text-gray-500 uppercase tracking-wide">
                   Communities Empowered
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-center gap-4 justify-center border border-gray-100">
+            <motion.div 
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: false }}
+              className="bg-white p-6 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-center gap-4 justify-center border border-gray-100"
+            >
               <div className="w-14 h-14 rounded-full bg-cyan-50 flex items-center justify-center text-3xl shadow-sm animate-float-delayed">
                 💧
               </div>
-              <div className="text-left">
-                <p className="text-2xl font-bold text-text-primary">200+</p>
+              <div className="text-center md:text-left">
+                <p className="text-2xl font-bold text-gray-900">200+</p>
                 <p className="text-xs text-gray-500 uppercase tracking-wide">
                   Water Resources Restored
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-center gap-4 justify-center border border-gray-100">
+            <motion.div 
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              viewport={{ once: false }}
+              className="bg-white p-6 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-center gap-4 justify-center border border-gray-100"
+            >
               <div className="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center text-3xl shadow-sm animate-float">
                 🧑‍🌾
               </div>
-              <div className="text-left">
-                <p className="text-2xl font-bold text-text-primary">1,500+</p>
+              <div className="text-center md:text-left">
+                <p className="text-2xl font-bold text-gray-900">1,500+</p>
                 <p className="text-xs text-gray-500 uppercase tracking-wide">
                   Farmers Trained
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex items-center gap-4 justify-center border border-gray-100">
+            <motion.div 
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              viewport={{ once: false }}
+              className="bg-white p-6 rounded-3xl shadow-sm hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-center gap-4 justify-center border border-gray-100"
+            >
               <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center text-3xl shadow-sm animate-float-delayed">
                 🌳
               </div>
-              <div className="text-left">
-                <p className="text-2xl font-bold text-text-primary">25,000+</p>
+              <div className="text-center md:text-left">
+                <p className="text-2xl font-bold text-gray-900">25,000+</p>
                 <p className="text-xs text-gray-500 uppercase tracking-wide">
                   Trees Planted
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       <section className="py-10 bg-bg-color">
@@ -399,53 +456,60 @@ const Home = () => {
       </section>
 
 
-      <section className="py-16 bg-bg-color">
-  <div className="max-w-7xl mx-auto px-4">
+     <section className="py-16 bg-bg-color">
+        <div className="max-w-7xl mx-auto px-4">
 
-    <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
-      Projects Across India
-    </h2>
+          <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
+            Projects Across India
+          </h2>
 
-    {/* 🔥 MAIN LAYOUT */}
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* 🔥 MAIN LAYOUT */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-      {/* 🗺️ MAP (LEFT - bigger) */}
-      <div className="lg:col-span-2  p-4 rounded-xl ">
-        <MapSection />
-      </div>
+            {/* 🗺️ MAP (LEFT - bigger) */}
+            <motion.div
+              initial={{ scale: 0.4, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1.2, type: "spring", bounce: 0.4 }}
+              viewport={{ once: false, amount: 0.1 }}
+              style={{ transformOrigin: "center center" }}
+              className="lg:col-span-2 p-4 rounded-xl"
+            >
+              <MapSection />
+            </motion.div>
 
-      {/* 📊 IMPACT (RIGHT) */}
-      <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8">
-        <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
-          <span className="text-2xl mr-2">📊</span> Impact Snapshot
-        </h3>
+            {/* 📊 IMPACT (RIGHT) */}
+            <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8">
+              <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
+                <span className="text-2xl mr-2">📊</span> Impact Snapshot
+              </h3>
 
-        <ul className="space-y-6">
-          <li className="border-b pb-4">
-            <div className="text-3xl font-bold text-primary mb-1">12</div>
-            <div className="text-sm text-gray-600 uppercase tracking-wide">States Covered</div>
-          </li>
+              <ul className="space-y-6">
+                <li className="border-b pb-4">
+                  <div className="text-3xl font-bold text-primary mb-1">12</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">States Covered</div>
+                </li>
 
-          <li className="border-b pb-4">
-            <div className="text-3xl font-bold text-secondary mb-1">45</div>
-            <div className="text-sm text-gray-600 uppercase tracking-wide">Districts Operated In</div>
-          </li>
+                <li className="border-b pb-4">
+                  <div className="text-3xl font-bold text-secondary mb-1">45</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">Districts Operated In</div>
+                </li>
 
-          <li className="border-b pb-4">
-            <div className="text-3xl font-bold text-accent mb-1">15+</div>
-            <div className="text-sm text-gray-600 uppercase tracking-wide">Active Major Projects</div>
-          </li>
+                <li className="border-b pb-4">
+                  <div className="text-3xl font-bold text-accent mb-1">15+</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">Active Major Projects</div>
+                </li>
 
-          <li>
-            <div className="text-3xl font-bold text-primary mb-1">2M+</div>
-            <div className="text-sm text-gray-600 uppercase tracking-wide">Beneficiaries Reached</div>
-          </li>
-        </ul>
-      </div>
+                <li>
+                  <div className="text-3xl font-bold text-primary mb-1">2M+</div>
+                  <div className="text-sm text-gray-600 uppercase tracking-wide">Beneficiaries Reached</div>
+                </li>
+              </ul>
+            </div>
 
-    </div>
-  </div>
-</section>
+          </div>
+        </div>
+      </section>
 
       <section className="py-10 bg-primary/10 border-t border-primary/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
