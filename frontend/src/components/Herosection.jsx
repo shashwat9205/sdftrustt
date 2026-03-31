@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
 // Handle image URL
-
+ 
 const makeImageUrl = (path) => {
   if (!path) return "https://via.placeholder.com/600x300?text=No+Image";
 
@@ -19,17 +19,17 @@ const makeImageUrl = (path) => {
 };
 
 function Herosection() {
-  const [heroCard, setHeroCard] = useState(null);
+  const [heroCards, setHeroCards] = useState([]);
 
-  // Fetch API for Hero Card
+  // Fetch API for Hero Cards
   useEffect(() => {
     const fetchHeroCard = async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/hero.php?t=${new Date().getTime()}`);
         const result = await res.json();
 
-        if (result.status === "success" && result.data) {
-          setHeroCard(result.data);
+        if (result.status === "success" && result.data && Array.isArray(result.data)) {
+          setHeroCards(result.data);
         }
       } catch (err) {
         console.error("Hero card fetch error:", err);
@@ -40,7 +40,22 @@ function Herosection() {
   }, []);
 
   return (
-    <section className="relative bg-[#F9F6EA] overflow-hidden pb-20 md:pb-28">
+    <>
+      <style>
+        {`
+          @keyframes scrollUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+          }
+          .animate-scroll-up {
+            animation: scrollUp 20s linear infinite;
+          }
+          .animate-scroll-up:hover {
+            animation-play-state: paused;
+          }
+        `}
+      </style>
+      <section className="relative bg-[#F9F6EA] overflow-hidden pb-20 md:pb-28">
 
       {/* VIDEO BACKGROUND */}
       <div className="absolute inset-0 z-0">
@@ -86,49 +101,48 @@ function Herosection() {
 
             <h3 className="text-white font-bold mb-3">Featured Video</h3>
 
-            {/* VIDEO/CARD */}
-            <div className="rounded-xl overflow-hidden relative group">
-              {heroCard ? (
-                <a href={heroCard.youtube_link} target="_blank" rel="noopener noreferrer" className="block w-full h-55 relative">
-                  {/* Thumbnail Image */}
-                  <img
-                    src={makeImageUrl(heroCard.image_url)}
-                    alt={heroCard.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  {/* Overlay & Title */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
-                     <h4 className="text-white font-serif text-lg font-bold leading-tight drop-shadow-md">
-                        {heroCard.title}
-                     </h4>
-                  </div>
-                  {/* Play Icon */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-14 h-14 bg-red-600/90 rounded-full flex items-center justify-center shadow-xl group-hover:bg-red-600 transition-colors backdrop-blur-sm">
-                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                  </div>
-                </a>
+            {/* FEATURES VIDEOS CARDS */}
+            <div className="rounded-xl overflow-hidden relative group h-64 md:h-80 w-full flex flex-col bg-black/10">
+              {heroCards.length > 0 ? (
+                <div className="animate-scroll-up flex flex-col gap-4 w-full absolute top-0 left-0" style={{ padding: '0.75rem' }}>
+                  {/* We duplicate the array to allow for a seamless infinite loop */}
+                  {[...heroCards, ...heroCards].map((card, index) => (
+                    <a 
+                      key={`${card.id}-${index}`} 
+                      href={card.youtube_link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="block w-full h-40 shrink-0 relative rounded-xl overflow-hidden shadow-md group/card"
+                    >
+                      {/* Thumbnail Image */}
+                      <img
+                        src={makeImageUrl(card.image_url)}
+                        alt={card.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover/card:scale-105"
+                      />
+                      {/* Overlay & Title */}
+                      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
+                        <h4 className="text-white font-serif text-sm md:text-base font-bold leading-tight drop-shadow-md">
+                          {card.title}
+                        </h4>
+                      </div>
+                      {/* Play Icon */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
+                        <div className="w-12 h-12 bg-red-600/90 rounded-full flex items-center justify-center shadow-xl transition-colors backdrop-blur-sm">
+                          <svg className="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
               ) : (
-                <div className="text-white text-center py-10 bg-black/20 rounded-xl h-55 flex items-center justify-center">
-                  <span>No video available</span>
+                <div className="text-white text-center flex-1 w-full bg-black/20 flex items-center justify-center">
+                  <span>No videos available</span>
                 </div>
               )}
             </div>
-
-            {/* BUTTON */}
-            {heroCard && (
-              <a
-                href={heroCard.youtube_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block mt-3 text-center bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
-              >
-                Watch on YouTube →
-              </a>
-            )}
           </div>
         </div>
 
@@ -148,6 +162,7 @@ function Herosection() {
         </svg>
       </div>
     </section>
+    </>
   );
 }
 
