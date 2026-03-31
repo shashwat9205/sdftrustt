@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
 const partners = [
-  "about/part.png",
-  "about/part2.png",
-  "about/part3.png",
-  "about/part4.png",
-  "about/part.png",
-  "about/part3.png",
-  "about/part2.png",
-  "about/part.png",
-  "about/part.png",
-  "about/part2.png",
-  "about/part3.png",
-  "about/part4.png"
+  "about/news4.png",
+  "about/news.png",
+  "about/news1.png",
+  "about/news3.png",
+  "about/news1.png",
+  "about/news3.png",
+  "about/news.png",
+  "about/news4.png",
+  "about/news3.png",
+  "about/news1.png",
+  "about/news4.png",
+  "about/news.png",
 ];
 
 const PartnersSection = () => {
@@ -53,17 +53,14 @@ const PartnersSection = () => {
             {partners.map((logo, i) => (
               <div
                 key={i}
-                className="group relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-800"
+                className="group flex items-center justify-center p-4 transition-all duration-500"
               >
-                {/* IMAGE FULL COVER */}
+                {/* IMAGE CONTAINED */}
                 <img
                   src={logo}
                   alt="partner"
-                  className="w-full h-42 object-cover transition-all duration-500 group-hover:scale-110"
+                  className="w-full h-32 object-contain transition-all duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-70 group-hover:opacity-100"
                 />
-
-                {/* HOVER OVERLAY */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition duration-500"></div>
               </div>
             ))}
 
