@@ -225,36 +225,15 @@ const Home = () => {
       </section>
 
      <section className="py-16 md:py-24 bg-bg-color relative px-4 sm:px-6 lg:px-8">
-        <motion.div 
+        <motion.div
           initial={{ borderRadius: "0px" }}
           whileInView={{ borderRadius: "100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: false, amount: 0.2 }}
           className="max-w-7xl mx-auto bg-gray-900 text-center py-16 px-6 sm:px-12 lg:px-16 shadow-xl relative overflow-hidden group"
         >
-          {/* Animated decorative horizontal lines */}
-          <div className="absolute inset-0 pointer-events-none z-1">
-            <motion.div 
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.2, ease: "easeInOut" }}
-              className="absolute top-[12%] left-10 right-10 h-px bg-white/20 origin-left"
-            />
-            <motion.div 
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.4, ease: "easeInOut" }}
-              className="absolute top-[38%] left-10 right-10 h-px bg-white/20 origin-right"
-            />
-            <motion.div 
-              initial={{ scaleX: 0, opacity: 0 }}
-              whileInView={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.6, ease: "easeInOut" }}
-              className="absolute top-[88%] left-10 right-10 h-px bg-white/20 origin-left"
-            />
-          </div>
 
-          <motion.h2 
+          <motion.h2
             initial={{ y: -20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -264,7 +243,7 @@ const Home = () => {
           </motion.h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 relative z-10">
-            <motion.div 
+            <motion.div
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -282,7 +261,7 @@ const Home = () => {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -300,7 +279,7 @@ const Home = () => {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -318,7 +297,7 @@ const Home = () => {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.6 }}
