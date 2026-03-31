@@ -49,18 +49,20 @@ const Home = () => {
 
  // Map Animation hooks
   const mapRef = useRef(null);
+  
   const { scrollYProgress } = useScroll({
     target: mapRef,
-    // Start animation when the top of the map is 80% down the screen
-    // End animation when the center of the map hits the center of the screen
-    offset: ["start 80%", "center center"],
+    // Start tracking when the top of the map is 75% down the screen
+    // Stop tracking when the center of the map hits the center of the screen
+    offset: ["start 75%", "center center"], 
   });
 
-  // Start scaled down at 50% (0.5), zoom into 100% (1)
-  const mapScale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
+  // 🔥 THE DELAY: Notice the [0.4, 1] instead of [0, 1].
+  // This forces the map to stay small until you've scrolled 40% of the way through the trigger area.
+  const mapScale = useTransform(scrollYProgress, [0.4, 1], [0.5, 1]);
   
-  // Start with a 15% circle, expand to 150% (to fully cover the corners of the rectangle)
-  const mapClipPercentage = useTransform(scrollYProgress, [0, 1], [15, 150]);
+  // Stays at a 15% circle, then expands to 150% to cover the corners
+  const mapClipPercentage = useTransform(scrollYProgress, [0.4, 1], [15, 150]);
   const mapClipPath = useMotionTemplate`circle(${mapClipPercentage}% at 50% 50%)`;
 
   // Focus Areas Animation hooks
