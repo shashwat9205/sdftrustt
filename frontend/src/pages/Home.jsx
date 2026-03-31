@@ -64,8 +64,9 @@ const Home = () => {
     offset: ["start end", "center center"],
   });
 
-  const focusMaxWidth = useTransform(focusScrollY, [0, 1], ["100%", "80%"]);
+  const focusMaxWidth = useTransform(focusScrollY, [0, 1], ["100%", "90%"]);
   const focusBorderRadius = useTransform(focusScrollY, [0, 1], ["0px", "80px"]);
+  const focusScale = useTransform(focusScrollY, [0, 1], [1, 0.92]);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -244,10 +245,10 @@ const Home = () => {
         </div>
       </section>
 
-      <section ref={focusRef} className="bg-bg-color relative flex justify-center py-4">
+      <section ref={focusRef} className="bg-bg-color relative flex justify-center py-4 overflow-hidden">
         <motion.div
-          style={{ width: "100%", maxWidth: focusMaxWidth, borderRadius: focusBorderRadius }}
-          className="mx-auto bg-gray-900 text-center py-16 md:py-24 px-6 sm:px-12 lg:px-16 shadow-xl relative overflow-hidden group"
+           style={{ width: "100%", maxWidth: focusMaxWidth, borderRadius: focusBorderRadius, scale: focusScale }}
+           className="mx-auto bg-gray-900 text-center py-16 md:py-24 px-6 sm:px-12 lg:px-16 shadow-xl relative group"
         >
 
           <motion.h2
