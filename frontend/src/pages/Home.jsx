@@ -244,7 +244,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section ref={focusRef} className="py-16 md:py-24 bg-bg-color relative">
+      <section ref={focusRef} className="py-16 md:py-24 bg-bg-color relative px-4 sm:px-6 lg:px-8">
         <motion.div
           style={{ maxWidth: focusMaxWidth, borderRadius: focusBorderRadius }}
           className="mx-auto bg-gray-900 text-center py-16 px-6 sm:px-12 lg:px-16 shadow-xl relative overflow-hidden group w-full"
