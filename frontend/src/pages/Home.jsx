@@ -47,15 +47,20 @@ const Home = () => {
   const [programsLoading, setProgramsLoading] = useState(true);
   const [programsError, setProgramsError] = useState("");
 
-  // Map Animation hooks
+ // Map Animation hooks
   const mapRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: mapRef,
-    offset: ["start 95%", "center center"],
+    // Start animation when the top of the map is 80% down the screen
+    // End animation when the center of the map hits the center of the screen
+    offset: ["start 80%", "center center"],
   });
 
-  const mapScale = useTransform(scrollYProgress, [0, 1], [0.7, 1]);
-  const mapClipPercentage = useTransform(scrollYProgress, [0, 1], [35, 100]);
+  // Start scaled down at 50% (0.5), zoom into 100% (1)
+  const mapScale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
+  
+  // Start with a 15% circle, expand to 150% (to fully cover the corners of the rectangle)
+  const mapClipPercentage = useTransform(scrollYProgress, [0, 1], [15, 150]);
   const mapClipPath = useMotionTemplate`circle(${mapClipPercentage}% at 50% 50%)`;
 
   // Focus Areas Animation hooks
@@ -479,7 +484,8 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
             {/* 🗺️ MAP (LEFT - bigger) */}
-            <div ref={mapRef} className="lg:col-span-2 relative">
+            {/* 🗺️ MAP (LEFT - bigger) */}
+            <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
               <motion.div
                 style={{
                   scale: mapScale,
@@ -488,11 +494,9 @@ const Home = () => {
                   transformOrigin: "center center",
                   backfaceVisibility: "hidden"
                 }}
-                className="w-full h-full p-4 rounded-xl overflow-hidden relative z-10"
+                className="w-full h-full relative z-10"
               >
-                <div style={{ transform: "translateZ(0)" }} className="w-full h-full">
-                  <MapSection />
-                </div>
+                <MapSection />
               </motion.div>
             </div>
 

@@ -147,12 +147,12 @@ const MapSection = () => {
             <div
                 id="map"
                 style={{
-                    height: "800px",
+                    height: "100%", // Changed from 800px
                     width: "100%",
                     borderRadius: "12px",
                     position: "relative",
                     zIndex: 1,
-                    marginLeft: "20px"
+                    // Removed marginLeft: "20px" to keep it perfectly centered for the clip-path
                 }}
             ></div>
         </>
