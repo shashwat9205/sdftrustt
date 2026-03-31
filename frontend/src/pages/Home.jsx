@@ -54,8 +54,8 @@ const Home = () => {
     offset: ["start 95%", "center center"],
   });
 
-  const mapScale = useTransform(scrollYProgress, [0, 1], [0.2, 1]);
-  const mapOpacity = useTransform(scrollYProgress, [0, 1], [0.2, 1]);
+  const mapScale = useTransform(scrollYProgress, [0, 1], [0.7, 1]);
+  const mapClipPath = useTransform(scrollYProgress, [0, 1], ["circle(20% at 50% 50%)", "circle(100% at 50% 50%)"]);
 
   // Focus Areas Animation hooks
   const focusRef = useRef(null);
@@ -482,7 +482,7 @@ const Home = () => {
               ref={mapRef}
               style={{
                 scale: mapScale,
-                opacity: mapOpacity,
+                clipPath: mapClipPath,
                 transformOrigin: "center center"
               }}
               className="lg:col-span-2 p-4 rounded-xl"

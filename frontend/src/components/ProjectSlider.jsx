@@ -88,7 +88,7 @@ const ProjectSlider = () => {
       <div className="relative max-w-7xl mx-auto px-4">
 
         <h2 className="text-4xl font-serif text-center mb-16 text-white drop-shadow-xl font-bold tracking-wide">
-          Our Projects
+          Ongoing Projects
         </h2>
 
         {/* SLIDER */}
