@@ -489,24 +489,25 @@ const Home = () => {
             {/* Notice the bg-gray-900 added below! */}
             {/* 🗺️ MAP (LEFT - bigger) */}
             {/* 1. Removed bg-gray-900 from this outer div so it stays transparent/matches the page */}
-            <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 rounded-xl overflow-hidden flex items-center justify-center">
-              
+           {/* 🗺️ MAP (LEFT - bigger) */}
+            <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 flex items-center justify-center bg-transparent">
               <motion.div
                 style={{
                   scale: mapScale,
                   clipPath: mapClipPath,
-                  WebkitClipPath: mapClipPath, 
+                  WebkitClipPath: mapClipPath, // Safari support
+                  backgroundColor: "#111827",  // 🔥 Forces the dark color to be CLIPPED
                   transformOrigin: "center center",
-                  backfaceVisibility: "hidden"
+                  backfaceVisibility: "hidden",
+                  width: "100%",
+                  height: "100%",
+                  position: "relative",
+                  zIndex: 10
                 }}
-                
-                className="w-full h-full relative z-10 bg-gray-900"
+                className="rounded-xl overflow-hidden shadow-lg"
               >
-                <div style={{ transform: "translateZ(0)" }} className="w-full h-full">
-                  <MapSection />
-                </div>
+                <MapSection />
               </motion.div>
-              
             </div>
 
             {/* 📊 IMPACT (RIGHT) */}

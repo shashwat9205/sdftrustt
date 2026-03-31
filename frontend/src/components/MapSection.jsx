@@ -146,18 +146,17 @@ return {
         };
     }, []);
 
-    return (
+return (
         <>
             <style>{`.leaflet-container { background: transparent !important; }`}</style>
             <div
                 id="map"
                 style={{
-                    height: "100%", // Changed from 800px
+                    height: "100%",  // 🔥 MUST be 100%, not 800px
                     width: "100%",
-                    borderRadius: "12px",
                     position: "relative",
                     zIndex: 1,
-                    // Removed marginLeft: "20px" to keep it perfectly centered for the clip-path
+                    // 🔥 Removed marginLeft to keep it perfectly centered
                 }}
             ></div>
         </>
