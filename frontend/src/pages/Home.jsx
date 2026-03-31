@@ -248,8 +248,8 @@ const Home = () => {
 
       <section ref={focusRef} className="bg-bg-color relative flex justify-center py-4 overflow-hidden">
         <motion.div
-           style={{ width: "100%", maxWidth: focusMaxWidth, borderRadius: focusBorderRadius, scale: focusScale }}
-           className="mx-auto bg-gray-900 text-center py-16 md:py-24 px-6 sm:px-12 lg:px-16 shadow-xl relative group"
+          style={{ width: "100%", maxWidth: focusMaxWidth, borderRadius: focusBorderRadius, scale: focusScale }}
+          className="mx-auto bg-gray-900 text-center py-16 md:py-24 px-6 sm:px-12 lg:px-16 shadow-xl relative group"
         >
 
           <motion.h2
@@ -410,7 +410,7 @@ const Home = () => {
 
       <Testimonials />
 
-      <section 
+      <section
         className="py-20 relative bg-cover bg-center bg-fixed"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
       >
@@ -524,9 +524,9 @@ const Home = () => {
                 </li>
               </ul>
             </div>
-            </div>
-
           </div>
+
+        </div>
       </section>
 
 
@@ -576,8 +576,8 @@ const Home = () => {
           {message.text && (
             <div
               className={`max-w-lg mx-auto mt-4 p-3 rounded-lg text-sm font-medium ${message.type === "success"
-                  ? "bg-green-100 text-green-800 border border-green-200"
-                  : "bg-red-100 text-red-800 border border-red-200"
+                ? "bg-green-100 text-green-800 border border-green-200"
+                : "bg-red-100 text-red-800 border border-red-200"
                 }`}
             >
               {message.text}
