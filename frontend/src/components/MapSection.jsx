@@ -67,12 +67,17 @@ const MapSection = () => {
             const stateName = feature.properties.NAME_1;
             const hasProjects = projectData[stateName]?.length > 0;
 
-            return {
-                color: "#ffffff",
-                weight: 1.5,
-                fillColor: hasProjects ? "#576123" : "#d1d5db", // Darker Olive green for active, darker gray for empty
-                fillOpacity: hasProjects ? 0.95 : 0.7,
-            };
+            // ... in MapSection.jsx
+
+// Update the conditional coloring line within defaultStyle function:
+return {
+    color: "#ffffff",
+    weight: 1.5,
+    fillColor: hasProjects ? "#576123" : "#333333", // Green for active, dark gray/shade for empty
+    fillOpacity: hasProjects ? 0.95 : 0.7,
+};
+
+// ...
         }
 
         function highlightStyle() {
