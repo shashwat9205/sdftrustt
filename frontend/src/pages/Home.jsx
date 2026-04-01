@@ -495,19 +495,14 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
             {/* 🗺️ MAP (LEFT - bigger) */}
-            {/* 🗺️ MAP (LEFT - bigger) */}
-            {/* 🗺️ MAP (LEFT - bigger) */}
-            {/* Notice the bg-gray-900 added below! */}
-            {/* 🗺️ MAP (LEFT - bigger) */}
-            {/* 1. Removed bg-gray-900 from this outer div so it stays transparent/matches the page */}
-           {/* 🗺️ MAP (LEFT - bigger) */}
+            
             <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 flex items-center justify-center bg-transparent">
               <motion.div
                 style={{
                   scale: mapScale,
                   clipPath: mapClipPath,
                   WebkitClipPath: mapClipPath, // Safari support
-                  backgroundColor: "#111827",  // 🔥 Forces the dark color to be CLIPPED
+                  // backgroundColor: "#111827",  // 🔥 Forces the dark color to be CLIPPED
                   transformOrigin: "center center",
                   backfaceVisibility: "hidden",
                   width: "100%",
