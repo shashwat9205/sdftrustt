@@ -45,21 +45,24 @@ const ProjectSlider = () => {
     return () => clearInterval(interval);
   }, [projects]);
 
-  // 🔥 VIDEO FORMATTER
+  // 🔥 YOUTUBE VIDEO FORMATTER
   const getEmbedUrl = (url) => {
     if (!url) return null;
-
     if (url.includes("youtube.com/embed/")) return url;
 
-    const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
 
     if (match && match[2].length === 11) {
       return `https://www.youtube.com/embed/${match[2]}`;
     }
-
     return null;
+  };
+
+  // 🔥 LOCAL VIDEO CHECKER
+  const isLocalVideo = (url) => {
+    if (!url) return false;
+    return /\.(mp4|webm|ogg)$/i.test(url);
   };
 
   if (loading) {
@@ -73,7 +76,14 @@ const ProjectSlider = () => {
   if (!projects.length) return null;
 
   const project = projects[index];
-  const videoSrc = getEmbedUrl(project.image_url || project.youtube);
+  const youtubeSrc = getEmbedUrl(project.youtube); // Assuming you have a youtube column, else ignore
+  
+  // Format the media URL securely
+  const mediaUrl = project.image_url 
+    ? `${ADMIN_BASE_URL}${project.image_url.replace(/^\/+/, '')}` 
+    : "/banner/fallback.jpg";
+
+  const isVideoFile = isLocalVideo(project.image_url);
 
   return (
     <section
@@ -128,16 +138,25 @@ const ProjectSlider = () => {
 
           {/* RIGHT */}
           <div className="relative h-75 md:h-auto bg-black">
-            {videoSrc ? (
+            {youtubeSrc ? (
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src={videoSrc}
+                src={youtubeSrc}
                 title={project.title}
                 allowFullScreen
               />
+            ) : isVideoFile ? (
+              <video
+                src={mediaUrl}
+                className="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
             ) : (
               <img
-                src={project.image_url ? `${ADMIN_BASE_URL}${project.image_url.replace(/^\/+/, '')}` : "/banner/fallback.jpg"}
+                src={mediaUrl}
                 alt={project.title}
                 className="w-full h-full object-cover"
               />
@@ -158,7 +177,7 @@ const ProjectSlider = () => {
                   setAnimate(true);
                 }, 100);
               }}
-              className={`h-2 rounded-full ${
+              className={`h-2 rounded-full transition-all ${
                 index === i ? "w-8 bg-white" : "w-2 bg-gray-400"
               }`}
             />
