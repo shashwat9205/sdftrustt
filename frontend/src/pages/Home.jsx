@@ -515,7 +515,7 @@ const Home = () => {
                   position: "relative",
                   zIndex: 10
                 }}
-                className="rounded-xl overflow-hidden shadow-lg"
+                className="bg-accent rounded-xl overflow-hidden shadow-lg"
               >
                 <MapSection />
               </motion.div>
