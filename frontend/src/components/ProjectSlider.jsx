@@ -129,15 +129,22 @@ const ProjectDetails = () => {
           <div className="lg:w-2/3 flex flex-col gap-8">
             
             {/* Project Hero Media */}
-            <div className="relative h-80 md:h-125 rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-black flex items-center justify-center">
+           {/* Project Hero Media */}
+            <div className="relative h-80 md:h-125 rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-gray-200 flex items-center justify-center">
               
-              {/* 🔥 UPDATED MEDIA RENDERER */}
+              {/* 🔥 UPDATED MEDIA RENDERER WITH CONTROLS */}
               {isVideoFile(project.image_url) ? (
                 <video
                   src={project.image_url}
                   className="w-full h-full object-cover"
-                  autoPlay loop muted playsInline
-                />
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  controls /* 🔥 ADDED THIS: Shows play button if autoplay fails */
+                >
+                  Your browser does not support the video tag.
+                </video>
               ) : (
                 <img
                   src={project.image_url}
