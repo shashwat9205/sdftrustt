@@ -13,7 +13,8 @@ const ProjectSlider = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch(PROJECTS_API);
+        // This forces the browser to fetch fresh data from the database every time
+const res = await fetch(`${PROJECTS_API}?t=${new Date().getTime()}`);
         const data = await res.json();
 
         if (data.status === "success") {
