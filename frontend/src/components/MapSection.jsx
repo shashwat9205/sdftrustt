@@ -31,13 +31,15 @@ const MapSection = ({ onStateSelect }) => {
         let geoLayer;
         let projectData = {};
 
-        fetch(`${API_BASE_URL}/projects.php`)
+       // 🔥 Added Cache-Buster and .trim() for safety!
+        fetch(`${API_BASE_URL}/projects.php?t=${Date.now()}`)
             .then((res) => res.json())
             .then((res) => {
                 const projects = res.data;
 
                 projects.forEach((p) => {
-                    const state = p.location;
+                    // .trim() removes accidental spaces like "Delhi " -> "Delhi"
+                    const state = p.location ? p.location.trim() : "";
 
                     if (!projectData[state]) {
                         projectData[state] = [];
