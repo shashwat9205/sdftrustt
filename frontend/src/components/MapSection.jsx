@@ -4,7 +4,8 @@ import "leaflet/dist/leaflet.css";
 
 import { API_BASE_URL } from "../config";
 
-const MapSection = () => {
+// 🔥 Added onStateSelect prop
+const MapSection = ({ onStateSelect }) => {
     useEffect(() => {
         const map = L.map("map", {
             zoomControl: false,
@@ -22,11 +23,14 @@ const MapSection = () => {
             [38, 97],
         ]);
 
+        // 🔥 Reset sidebar to Impact Snapshot if you click the dark background of the map
+        map.on('click', () => {
+            if (onStateSelect) onStateSelect(null);
+        });
 
         let geoLayer;
         let projectData = {};
 
-        // 🔥 Fetch your PHP API Dynamically (Compatible with Bluehost and Local)
         fetch(`${API_BASE_URL}/projects.php`)
             .then((res) => res.json())
             .then((res) => {
@@ -67,35 +71,28 @@ const MapSection = () => {
             const stateName = feature.properties.NAME_1;
             const hasProjects = projectData[stateName]?.length > 0;
 
-            // ... in MapSection.jsx
-
-// Update the conditional coloring line within defaultStyle function:
-return {
-    color: "#ffffff",
-    weight: 1.5,
-    fillColor: hasProjects ? "#576123" : "#333333", // Green for active, dark gray/shade for empty
-    fillOpacity: hasProjects ? 0.95 : 0.7,
-};
-
-// ...
+            return {
+                color: "#ffffff",
+                weight: 1.5,
+                fillColor: hasProjects ? "#576123" : "#333333", 
+                fillOpacity: hasProjects ? 0.95 : 0.7,
+            };
         }
 
         function highlightStyle() {
             return {
                 color: "#ffffff",
                 weight: 2,
-                fillColor: "#1A2718", // Darker Deep forest green on hover
+                fillColor: "#1A2718", 
                 fillOpacity: 1,
             };
         }
 
         function highlightFeature(e) {
             const layer = e.target;
-
             geoLayer.eachLayer((l) => {
                 l.setStyle({ fillOpacity: 0.3 });
             });
-
             layer.setStyle(highlightStyle());
             layer.setStyle({ fillOpacity: 1 });
             layer.bringToFront();
@@ -135,28 +132,38 @@ return {
                 className: "custom-tooltip",
             });
 
+            // 🔥 Added click handler for the state
             layer.on({
                 mouseover: highlightFeature,
                 mouseout: resetHighlight,
+                click: (e) => {
+                    L.DomEvent.stopPropagation(e); // Prevents map background click from firing
+                    if (onStateSelect) {
+                        onStateSelect({
+                            name: stateName,
+                            projects: projects
+                        });
+                    }
+                }
             });
         }
 
         return () => {
             map.remove();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-return (
+    return (
         <>
             <style>{`.leaflet-container { background: transparent !important; }`}</style>
             <div
                 id="map"
                 style={{
-                    height: "100%",  // 🔥 MUST be 100%, not 800px
+                    height: "100%", 
                     width: "100%",
                     position: "relative",
                     zIndex: 1,
-                    // 🔥 Removed marginLeft to keep it perfectly centered
                 }}
             ></div>
         </>

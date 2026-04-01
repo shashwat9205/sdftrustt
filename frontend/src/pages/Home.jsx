@@ -47,6 +47,10 @@ const Home = () => {
   const [programsLoading, setProgramsLoading] = useState(true);
   const [programsError, setProgramsError] = useState("");
 
+
+  // 🔥 ADD IT RIGHT HERE:
+  const [selectedMapState, setSelectedMapState] = useState(null);
+
 // Map Animation hooks
   const mapRef = useRef(null);
   
@@ -492,17 +496,16 @@ const Home = () => {
           </h2>
 
           {/* 🔥 MAIN LAYOUT */}
+         {/* 🔥 MAIN LAYOUT */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
             {/* 🗺️ MAP (LEFT - bigger) */}
-            
             <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 flex items-center justify-center bg-transparent">
               <motion.div
                 style={{
                   scale: mapScale,
                   clipPath: mapClipPath,
-                  WebkitClipPath: mapClipPath, // Safari support
-                  // backgroundColor: "#111827",  // 🔥 Forces the dark color to be CLIPPED
+                  WebkitClipPath: mapClipPath, 
                   transformOrigin: "center center",
                   backfaceVisibility: "hidden",
                   width: "100%",
@@ -512,38 +515,89 @@ const Home = () => {
                 }}
                 className="bg-accent rounded-xl overflow-hidden shadow-lg"
               >
-                <MapSection />
+                {/* 🔥 Pass the state setter to the Map */}
+                <MapSection onStateSelect={setSelectedMapState} />
               </motion.div>
             </div>
 
-            {/* 📊 IMPACT (RIGHT) */}
-            <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8">
-              <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
-                <span className="text-2xl mr-2">📊</span> Impact Snapshot
-              </h3>
+            {/* 📊 DYNAMIC SIDEBAR (RIGHT) */}
+            <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8 min-h-112.5">
+              
+              {/* IF A STATE IS CLICKED, SHOW ITS PROJECTS */}
+              {selectedMapState ? (
+                <div>
+                  <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
+                    <h3 className="text-2xl font-serif font-bold text-text-primary flex items-center">
+                      <span className="text-2xl mr-2">📍</span> {selectedMapState.name}
+                    </h3>
+                    <button 
+                      onClick={() => setSelectedMapState(null)} 
+                      className="text-gray-400 hover:text-red-500 text-2xl font-bold transition-colors"
+                      title="Close"
+                    >
+                      &times;
+                    </button>
+                  </div>
 
-              <ul className="space-y-6">
-                <li className="border-b pb-4">
-                  <div className="text-3xl font-bold text-primary mb-1">12</div>
-                  <div className="text-sm text-gray-600 uppercase tracking-wide">States Covered</div>
-                </li>
+                  {selectedMapState.projects.length > 0 ? (
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-4">
+                        Ongoing Projects ({selectedMapState.projects.length})
+                      </p>
+                      <ul className="space-y-3 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
+                        {selectedMapState.projects.map((proj, idx) => (
+                          <li key={idx} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm">
+                            <span className="text-primary text-lg leading-none">⚡</span>
+                            <span className="text-gray-700 font-medium text-sm leading-relaxed">{proj}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                      <span className="text-4xl block mb-3 opacity-50">🌱</span>
+                      <p className="text-gray-500 font-medium">No active projects</p>
+                      <p className="text-gray-400 text-sm mt-1">in this state currently.</p>
+                    </div>
+                  )}
+                </div>
 
-                <li className="border-b pb-4">
-                  <div className="text-3xl font-bold text-secondary mb-1">45</div>
-                  <div className="text-sm text-gray-600 uppercase tracking-wide">Districts Operated In</div>
-                </li>
+              ) : (
+                /* OTHERWISE, SHOW DEFAULT IMPACT SNAPSHOT */
+                <div>
+                  <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
+                    <span className="text-2xl mr-2">📊</span> Impact Snapshot
+                  </h3>
 
-                <li className="border-b pb-4">
-                  <div className="text-3xl font-bold text-accent mb-1">15+</div>
-                  <div className="text-sm text-gray-600 uppercase tracking-wide">Active Major Projects</div>
-                </li>
+                  <ul className="space-y-6">
+                    <li className="border-b pb-4">
+                      <div className="text-3xl font-bold text-primary mb-1">12</div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">States Covered</div>
+                    </li>
 
-                <li>
-                  <div className="text-3xl font-bold text-primary mb-1">2M+</div>
-                  <div className="text-sm text-gray-600 uppercase tracking-wide">Beneficiaries Reached</div>
-                </li>
-              </ul>
+                    <li className="border-b pb-4">
+                      <div className="text-3xl font-bold text-secondary mb-1">45</div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">Districts Operated In</div>
+                    </li>
+
+                    <li className="border-b pb-4">
+                      <div className="text-3xl font-bold text-accent mb-1">15+</div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">Active Major Projects</div>
+                    </li>
+
+                    <li>
+                      <div className="text-3xl font-bold text-primary mb-1">2M+</div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">Beneficiaries Reached</div>
+                    </li>
+                  </ul>
+                  
+                  <div className="mt-8 pt-4 border-t border-gray-100 text-center">
+                    <p className="text-xs text-gray-400 italic">👆 Click any highlighted state on the map to view local projects.</p>
+                  </div>
+                </div>
+              )}
             </div>
+            
           </div>
 
         </div>
