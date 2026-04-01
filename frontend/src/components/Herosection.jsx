@@ -23,8 +23,7 @@ const getYoutubeId = (url) => {
 
 function Herosection() {
   const [heroCards, setHeroCards] = useState([]);
-  const [activeVideo, setActiveVideo] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef(null);
 
   // 🔥 Fetch API
@@ -36,10 +35,6 @@ function Herosection() {
 
         if (result.status === "success" && Array.isArray(result.data)) {
           setHeroCards(result.data);
-
-          // default video only once
-          const firstVideo = getYoutubeId(result.data[0]?.youtube_link);
-          if (firstVideo) setActiveVideo(firstVideo);
         }
       } catch (err) {
         console.error("Hero fetch error:", err);
@@ -49,13 +44,13 @@ function Herosection() {
     fetchHeroCard();
   }, []);
 
-  // 🔁 Auto Slide (ONLY slider move, video NOT change)
+  // 🔁 Auto Slide (only slider)
   useEffect(() => {
     if (heroCards.length === 0) return;
 
     intervalRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % heroCards.length);
-    }, 3000);
+      setActiveIndex((prev) => (prev + 1) % heroCards.length);
+    }, 15000);
 
     return () => clearInterval(intervalRef.current);
   }, [heroCards]);
@@ -65,14 +60,19 @@ function Herosection() {
 
   const handleMouseLeave = () => {
     intervalRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % heroCards.length);
+      setActiveIndex((prev) => (prev + 1) % heroCards.length);
     }, 3000);
   };
+
+  // 🎥 Active Video
+  const activeVideo = getYoutubeId(
+    heroCards[activeIndex]?.youtube_link
+  );
 
   return (
     <section className="relative bg-black overflow-hidden pb-32">
 
-      {/* 🎥 FULL WIDTH VIDEO */}
+      {/* 🎥 VIDEO */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         {activeVideo && (
           <iframe
@@ -88,14 +88,14 @@ function Herosection() {
       </div>
 
       {/* 📝 CONTENT */}
-      <div className="relative z-10 w-[95%] mx-auto min-h-150 flex items-center">
+      <div className="relative z-10 w-[95%] mx-auto min-h-[600px] flex items-center">
         <div className="max-w-2xl text-white pl-6 md:pl-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Empowering Communities
           </h1>
 
           <p className="mb-6">
-            Lorem ipsum dolor sit amet.
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis sunt consectetur, natus ratione tenetur excepturi in quidem distinctio sequi voluptatem, impedit minima. Inventore ipsa excepturi cupiditate, vitae quasi autem quae nostrum corporis odio tempore facere harum dolore deleniti. Nesciunt rerum omnis aspernatur cum inventore enim reiciendis perspiciatis autem perferendis deserunt.
           </p>
 
           <Link
@@ -107,9 +107,9 @@ function Herosection() {
         </div>
       </div>
 
-      {/* 🎯 3 ITEM SLIDER */}
+      {/* 🎯 SLIDER (UPPER FROM SVG) */}
       <div
-        className="absolute bottom-24 left-0 w-full z-30 flex justify-center"
+        className="absolute bottom-32 md:bottom-15 left-0 w-full z-30 flex justify-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -118,21 +118,15 @@ function Herosection() {
           {heroCards.length > 0 &&
             [-1, 0, 1].map((offset) => {
               const index =
-                (currentIndex + offset + heroCards.length) %
+                (activeIndex + offset + heroCards.length) %
                 heroCards.length;
 
               const card = heroCards[index];
-              const vid = getYoutubeId(card.youtube_link);
 
               return (
                 <div
                   key={index}
-                  onClick={() => {
-                    if (vid) {
-                      setActiveVideo(vid); // ✅ ONLY HERE VIDEO CHANGE
-                      setCurrentIndex(index);
-                    }
-                  }}
+                  onClick={() => setActiveIndex(index)}
                   className={`cursor-pointer transition-all duration-500 rounded-xl overflow-hidden
                   ${
                     offset === 0
@@ -143,7 +137,7 @@ function Herosection() {
                   <img
                     src={`${ADMIN_BASE_URL}${card.image_url}`}
                     alt={card.title}
-                    className="w-37.5 h-25 object-cover"
+                    className="w-[100px] h-[60px] object-cover"
                   />
                 </div>
               );
@@ -152,8 +146,8 @@ function Herosection() {
         </div>
       </div>
 
-      {/* ✅ SVG */}
-      <div className="absolute bottom-0 w-full overflow-hidden leading-none z-10">
+      {/* ✅ SVG (ONLY POSITION CHANGED — DESIGN SAME) */}
+      <div className="absolute -bottom-20 md:-bottom-12 w-full overflow-hidden leading-none z-10">
         <svg
           className="w-full h-24 md:h-32 lg:h-40"
           viewBox="0 0 1440 320"
