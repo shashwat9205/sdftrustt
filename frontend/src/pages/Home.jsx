@@ -521,15 +521,27 @@ const Home = () => {
             </div>
 
             {/* 📊 DYNAMIC SIDEBAR (RIGHT) */}
-            <div id="impact" className="bg-white sticky top-24 rounded-xl shadow-sm border border-gray-100 p-8 min-h-112.5">
+            <div id="impact" className="bg-white sticky top-24  rounded-xl shadow-sm border border-gray-100 p-8 min-h-112.5">
               
               {/* IF A STATE IS CLICKED, SHOW ITS PROJECTS */}
               {selectedMapState ? (
                 <div>
+
+
+                <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
+                    <span className="text-2xl mr-2">📊</span> Impact Snapshot
+                  </h3>
+
+                    <br />
+
+
                   <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
-                    <h3 className="text-2xl font-serif font-bold text-text-primary flex items-center">
-                      <span className="text-2xl mr-2">📍 State:- </span> {selectedMapState.name}
-                    </h3>
+                  
+                    
+                    <h4 className="text-2xl font-serif font-bold text-text-primary flex items-center">
+                    
+                      <span className="text-2xl mr-2">📍State:- </span> {selectedMapState.name}
+                    </h4>
                     <button 
                       onClick={() => setSelectedMapState(null)} 
                       className="text-gray-400 hover:text-red-500 text-2xl font-bold transition-colors"
