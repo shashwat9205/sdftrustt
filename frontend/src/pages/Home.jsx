@@ -488,7 +488,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
 
           <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
-            Our Grassroot Presence
+            Our Grassroots Presence
           </h2>
 
           {/* 🔥 MAIN LAYOUT */}
