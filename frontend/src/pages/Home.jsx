@@ -528,7 +528,7 @@ const Home = () => {
                 <div>
                   <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
                     <h3 className="text-2xl font-serif font-bold text-text-primary flex items-center">
-                      <span className="text-2xl mr-2">📍</span> {selectedMapState.name}
+                      <span className="text-2xl mr-2">📍 State:- </span> {selectedMapState.name}
                     </h3>
                     <button 
                       onClick={() => setSelectedMapState(null)} 
