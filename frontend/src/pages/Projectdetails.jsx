@@ -16,6 +16,12 @@ const makeImageUrl = (path) => {
   return `${BASE_URL}${path.replace(/^\/+/, "")}`;
 };
 
+// 🔥 WE ADDED THIS HELPER FUNCTION BACK IN
+const isVideoFile = (url) => {
+  if (!url) return false;
+  return /\.(mp4|webm|ogg)$/i.test(url);
+};
+
 const ProjectDetails = () => {
   const { slug } = useParams();
 
@@ -122,17 +128,34 @@ const ProjectDetails = () => {
           {/* LEFT COLUMN: Main Project Details (Takes up 2/3 width) */}
           <div className="lg:w-2/3 flex flex-col gap-8">
             
-            {/* Project Hero Image */}
-            <div className="relative h-80 md:h-125 rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-gray-200">
-              <img
-                src={project.image_url}
-                alt={`${project.title}`}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src =
-                    "https://via.placeholder.com/1200x800?text=Image+Not+Found";
-                }}
-              />
+            {/* Project Hero Media */}
+            <div className="relative h-80 md:h-125 rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-gray-200 flex items-center justify-center">
+              
+              {/* 🔥 UPDATED MEDIA RENDERER WITH CONTROLS */}
+              {isVideoFile(project.image_url) ? (
+                <video
+                  src={project.image_url}
+                  className="w-full h-full object-cover"
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline
+                  controls
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <img
+                  src={project.image_url}
+                  alt={`${project.title}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/1200x800?text=Image+Not+Found";
+                  }}
+                />
+              )}
+
               <div className="absolute top-4 left-4 z-10">
                 <span className={`text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-md ${
                     project.status === 'active' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
