@@ -1,270 +1,193 @@
-import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
-const BASE_URL = ADMIN_BASE_URL;
+const PROJECTS_API = `${API_BASE_URL}/projects.php`;
 
-const makeImageUrl = (path) => {
-  if (!path) {
-    return "https://via.placeholder.com/1200x800?text=No+Image";
-  }
-
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
-
-  return `${BASE_URL}${path.replace(/^\/+/, "")}`;
-};
-
-// 🔥 Added Video Checker Helper
-const isVideoFile = (url) => {
-  if (!url) return false;
-  return /\.(mp4|webm|ogg)$/i.test(url);
-};
-
-const ProjectDetails = () => {
-  const { slug } = useParams();
-
-  const [project, setProject] = useState(null);
+const ProjectSlider = () => {
+  const [projects, setProjects] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [animate, setAnimate] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
+  // 🔥 FETCH PROJECTS
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
-    const fetchProject = async () => {
+    const fetchProjects = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/projects.php?t=${Date.now()}`);
+        // This forces the browser to fetch fresh data from the database every time
+const res = await fetch(`${PROJECTS_API}?t=${new Date().getTime()}`);
+        const data = await res.json();
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch project details");
+        if (data.status === "success") {
+          setProjects(data.data);
         }
-
-        const data = await response.json();
-
-        if (data.status !== "success") {
-          throw new Error(data.message || "Could not load project data");
-        }
-
-        const foundProject = data.data.find((item) => item.slug === slug);
-
-        if (!foundProject) {
-          throw new Error("Project not found");
-        }
-
-        const imageUrl = makeImageUrl(foundProject.image_url);
-
-        setProject({
-          ...foundProject,
-          image_url: imageUrl,
-        });
       } catch (err) {
-        setError(err.message);
+        console.error("API Error:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProject();
-  }, [slug]);
+    fetchProjects();
+  }, []);
+
+  // 🔥 AUTO SLIDE
+  useEffect(() => {
+    if (!projects || projects.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setAnimate(false);
+
+      setTimeout(() => {
+        setIndex((prev) => (prev + 1) % projects.length);
+        setAnimate(true);
+      }, 500);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [projects]);
+
+  // 🔥 YOUTUBE VIDEO FORMATTER
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+    if (url.includes("youtube.com/embed/")) return url;
+
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+
+    if (match && match[2].length === 11) {
+      return `https://www.youtube.com/embed/${match[2]}`;
+    }
+    return null;
+  };
+
+  // 🔥 LOCAL VIDEO CHECKER
+  const isLocalVideo = (url) => {
+    if (!url) return false;
+    return /\.(mp4|webm|ogg)$/i.test(url);
+  };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-color">
-        <div className="text-xl font-bold text-primary animate-pulse">
-          Loading project details...
-        </div>
+      <div className="text-center py-20 bg-[#F3EFE4]">
+        <p className="text-xl">Loading projects...</p>
       </div>
     );
   }
 
-  if (error || !project) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-color px-4">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-3 text-red-500">
-            Project not found
-          </h2>
-          <p className="text-gray-600 mb-6">
-            {error || "The project you are looking for does not exist."}
-          </p>
-          <Link
-            to="/projects"
-            className="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-[#5a6425] transition-colors"
-          >
-            Back to Projects
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  if (!projects.length) return null;
+
+  const project = projects[index];
+  const youtubeSrc = getEmbedUrl(project.youtube); // Assuming you have a youtube column, else ignore
+  
+  // Format the media URL securely
+  const mediaUrl = project.image_url 
+    ? `${ADMIN_BASE_URL}${project.image_url.replace(/^\/+/, '')}` 
+    : "/banner/fallback.jpg";
+
+  const isVideoFile = isLocalVideo(project.image_url);
 
   return (
-    <div className="bg-bg-color min-h-screen ">
-      
-      {/* Hero Header */}
-      <section className="bg-primary text-white pt-20 pb-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-block bg-white/20 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
-            {project.category}
+    <section
+      className="py-24 relative overflow-hidden bg-cover bg-center bg-fixed"
+      style={{
+        backgroundImage: "url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')", 
+      }}
+    >
+      {/* STUNNING GLASS OVERLAY */}
+      <div className="absolute inset-0 bg-linear-to-br from-[#233520]/80 via-black/60 to-[#6a752b]/80 backdrop-blur-[2px]"></div>
+
+      <div className="relative max-w-7xl mx-auto px-4">
+
+        <h2 className="text-4xl font-serif text-center mb-16 text-white drop-shadow-xl font-bold tracking-wide">
+          Ongoing Projects
+        </h2>
+
+        {/* SLIDER */}
+        <div
+          className={`bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden grid md:grid-cols-2 min-h-112.5 transition-all duration-700 ${
+            animate
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 -translate-x-10"
+          }`}
+        >
+
+          {/* LEFT */}
+          <div className="p-8 md:p-12 flex flex-col justify-center">
+            <span className="text-sm font-bold text-[#6a752b] uppercase mb-3">
+              {project.category}
+            </span>
+
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">
+              {project.title}
+            </h3>
+
+            <p className="text-gray-600 mb-6 line-clamp-4">
+              {project.description}
+            </p>
+
+            <div className="text-gray-500 mb-6">
+              📍 {project.location}
+            </div>
+
+            <a
+              href={`/projectdetails/${project.slug}`}
+              className="inline-block bg-[#6a752b] text-white px-8 py-3 rounded-full"
+            >
+              View Details →
+            </a>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-4 max-w-4xl mx-auto leading-tight">
-            {project.title}
-          </h1>
-
-          <p className="text-lg md:text-xl max-w-2xl mx-auto flex items-center justify-center gap-2 text-green-50">
-            <span>📍</span> {project.location}
-          </p>
-        </div>
-      </section>
-
-      {/* Main Content Layout */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-          
-          {/* LEFT COLUMN: Main Project Details (Takes up 2/3 width) */}
-          <div className="lg:w-2/3 flex flex-col gap-8">
-            
-            {/* Project Hero Media */}
-            <div className="relative h-80 md:h-125 rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-black flex items-center justify-center">
-              
-              {/* 🔥 UPDATED MEDIA RENDERER */}
-              {isVideoFile(project.image_url) ? (
-                <video
-                  src={project.image_url}
-                  className="w-full h-full object-cover"
-                  autoPlay loop muted playsInline
-                />
-              ) : (
-                <img
-                  src={project.image_url}
-                  alt={`${project.title}`}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "https://via.placeholder.com/1200x800?text=Image+Not+Found";
-                  }}
-                />
-              )}
-
-              <div className="absolute top-4 left-4 z-10">
-                <span className={`text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-md ${
-                    project.status === 'active' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
-                  }`}>
-                  Status: {project.status || "active"}
-                </span>
-              </div>
-            </div>
-            
-            {/* About The Project Content */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10">
-              <h2 className="text-3xl font-serif text-text-primary mb-6 flex items-center gap-3">
-                <span className="text-primary text-2xl">⚡</span> About the Project
-              </h2>
-
-              <div className="prose prose-lg text-gray-600 max-w-none">
-                {(project.description || "")
-                  .split("\n")
-                  .map((paragraph, index) => (
-                    <p key={index} className="mb-5 leading-relaxed text-gray-600">
-                      {paragraph}
-                    </p>
-                  ))}
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: Sidebar (Takes up 1/3 width) */}
-          <div className="lg:w-1/3">
-            {/* Sticky container makes the sidebar follow the user down the page */}
-            <div className="sticky top-28 flex flex-col gap-6">
-              
-              {/* Quick Facts Widget */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-                <h3 className="text-xl font-serif font-bold text-text-primary border-b border-gray-100 pb-4 mb-6">
-                  Project Overview
-                </h3>
-                
-                <ul className="space-y-6">
-                  <li className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center shrink-0 text-lg">
-                      📍
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-0.5">Location</p>
-                      <p className="font-medium text-gray-800">{project.location}</p>
-                    </div>
-                  </li>
-                  
-                  <li className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-green-50 text-green-500 flex items-center justify-center shrink-0 text-lg">
-                      🏷️
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-0.5">Category</p>
-                      <p className="font-medium text-gray-800">{project.category}</p>
-                    </div>
-                  </li>
-
-                  <li className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0 text-lg">
-                      📊
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-0.5">Current Status</p>
-                      <p className="font-medium text-gray-800 capitalize">{project.status || "Active"}</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Call to Action Widget */}
-              <div className="bg-[#233520] rounded-2xl shadow-lg p-8 text-center relative overflow-hidden">
-                {/* Background decorative circle */}
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white opacity-5 rounded-full blur-2xl"></div>
-                
-                <span className="text-4xl block mb-4">🤝</span>
-                <h3 className="text-2xl font-serif font-bold text-white mb-3">Support Our Cause</h3>
-                <p className="text-sm text-green-100 mb-8 opacity-90 leading-relaxed">
-                  Your contribution helps us expand projects like this and reach more beneficiaries in need.
-                </p>
-                
-                <Link
-                  to="/donate"
-                  className="block w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3.5 px-4 rounded-xl shadow-md transition-all hover:-translate-y-1 hover:shadow-xl"
-                >
-                  Donate to this Initiative
-                </Link>
-                <Link
-                  to="/get-involved"
-                  className="block w-full text-white font-medium py-3 mt-3 hover:text-yellow-400 transition-colors text-sm"
-                >
-                  Or become a volunteer →
-                </Link>
-              </div>
-
-            </div>
+          {/* RIGHT */}
+          <div className="relative h-75 md:h-auto bg-black">
+            {youtubeSrc ? (
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={youtubeSrc}
+                title={project.title}
+                allowFullScreen
+              />
+            ) : isVideoFile ? (
+              <video
+                src={mediaUrl}
+                className="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            ) : (
+              <img
+                src={mediaUrl}
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
+            )}
           </div>
 
         </div>
-      </section>
 
-      {/* Back Navigation */}
-      <section className="py-16 mt-8 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 text-gray-500 hover:text-primary transition-colors font-bold tracking-wide"
-          >
-            <span className="text-xl">←</span> Return to Ongoing Projects
-          </Link>
+        {/* DOTS */}
+        <div className="flex justify-center mt-8 gap-2">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setAnimate(false);
+                setTimeout(() => {
+                  setIndex(i);
+                  setAnimate(true);
+                }, 100);
+              }}
+              className={`h-2 rounded-full transition-all ${
+                index === i ? "w-8 bg-white" : "w-2 bg-gray-400"
+              }`}
+            />
+          ))}
         </div>
-      </section>
-    </div>
+
+      </div>
+    </section>
   );
 };
 
-export default ProjectDetails;
+export default ProjectSlider;
