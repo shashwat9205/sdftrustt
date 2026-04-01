@@ -488,7 +488,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4">
 
           <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
-            Projects Across India
+            Our Grassroot Presence
           </h2>
 
           {/* 🔥 MAIN LAYOUT */}
@@ -501,7 +501,7 @@ const Home = () => {
             {/* 🗺️ MAP (LEFT - bigger) */}
             {/* 1. Removed bg-gray-900 from this outer div so it stays transparent/matches the page */}
            {/* 🗺️ MAP (LEFT - bigger) */}
-            <div ref={mapRef} className="lg:col-span-2 relative h-[600px] md:h-[800px] flex items-center justify-center bg-transparent">
+            <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 flex items-center justify-center bg-transparent">
               <motion.div
                 style={{
                   scale: mapScale,
