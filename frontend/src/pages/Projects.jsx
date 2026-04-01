@@ -5,8 +5,11 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
-
-
+// 🔥 Added Video Checker Helper
+const isVideoFile = (url) => {
+  if (!url) return false;
+  return /\.(mp4|webm|ogg)$/i.test(url);
+};
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -34,8 +37,6 @@ const Projects = () => {
 
     fetchProjects();
   }, []);
-
-   // State wise locations and map integration
 
   return (
     <div className="bg-bg-color min-h-screen pb-20">
@@ -73,7 +74,22 @@ const Projects = () => {
             ) : (
               projects.map((project) => (
                 <div key={project.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
-                  <img src={`${ADMIN_BASE_URL}${project.image_url}`} alt={project.title} className="w-full md:w-48 h-48 object-cover rounded-lg" />
+                  
+                  {/* 🔥 UPDATED MEDIA RENDERER */}
+                  {isVideoFile(project.image_url) ? (
+                    <video 
+                      src={`${ADMIN_BASE_URL}${project.image_url.replace(/^\/+/, '')}`} 
+                      className="w-full md:w-48 h-48 object-cover rounded-lg"
+                      autoPlay loop muted playsInline
+                    />
+                  ) : (
+                    <img 
+                      src={`${ADMIN_BASE_URL}${project.image_url.replace(/^\/+/, '')}`} 
+                      alt={project.title} 
+                      className="w-full md:w-48 h-48 object-cover rounded-lg"
+                      onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/400x300?text=No+Image" }}
+                    />
+                  )}
 
                   <div>
                     <div className="text-xs font-bold text-accent uppercase tracking-wider mb-2">{project.category}</div>
@@ -91,11 +107,6 @@ const Projects = () => {
             )}
           </div>
         </div>
-
-
-
-        
-        
 
       </section>
     </div>
