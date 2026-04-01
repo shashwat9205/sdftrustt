@@ -61,7 +61,7 @@ function Herosection() {
   const handleMouseLeave = () => {
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % heroCards.length);
-    }, 3000);
+    }, 15000);
   };
 
   // 🎥 Active Video
@@ -88,7 +88,7 @@ function Herosection() {
       </div>
 
       {/* 📝 CONTENT */}
-      <div className="relative z-10 w-[95%] mx-auto min-h-[600px] flex items-center">
+      <div className="relative z-10 w-[95%] mx-auto min-h-150 flex items-center">
         <div className="max-w-2xl text-white pl-6 md:pl-10">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Empowering Communities
@@ -137,7 +137,7 @@ function Herosection() {
                   <img
                     src={`${ADMIN_BASE_URL}${card.image_url}`}
                     alt={card.title}
-                    className="w-[100px] h-[60px] object-cover"
+                    className="w-25 h-15 object-cover"
                   />
                 </div>
               );

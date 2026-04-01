@@ -47,27 +47,29 @@ const Home = () => {
   const [programsLoading, setProgramsLoading] = useState(true);
   const [programsError, setProgramsError] = useState("");
 
- // Map Animation hooks
+// Map Animation hooks
   const mapRef = useRef(null);
+  
   const { scrollYProgress } = useScroll({
     target: mapRef,
-    // Start animation when the top of the map is 80% down the screen
-    // End animation when the center of the map hits the center of the screen
-    offset: ["start 60%", "center center"],
+    // 🔥 Changed to "start 90%": This makes the animation trigger EARLIER (higher up on the screen)
+    offset: ["start 90%", "center center"],
   });
 
-  // 1. Starts scaling at 0.5, grows to 0.8 while circular, then finishes at 1
+  // 🔥 Removed the delay (starts at 0 instead of 0.4) so it zooms smoothly right away.
+  // Starts at 0.6 scale so the map of India fits perfectly in the frame.
   const mapScale = useTransform(
     scrollYProgress, 
-    [0.4, 0.85, 1], 
-    [0.5, 0.8, 1]
+    [0, 0.7, 1], 
+    [0.6, 0.85, 1]
   );
   
-  // 2. Grows to 45% (staying a perfect circle), then rapidly expands to 150% to fill the rectangle
+  // 🔥 Starts with a MUCH bigger circle (40%) so the map isn't cut off!
+  // It grows to 60%, then rapidly bursts to 150% to fill the rectangle.
   const mapClipPercentage = useTransform(
     scrollYProgress, 
-    [0.4, 0.85, 1], 
-    [15, 45, 150]
+    [0, 0.7, 1], 
+    [40, 60, 150]
   );
   
   const mapClipPath = useMotionTemplate`circle(${mapClipPercentage}% at 50% 50%)`;
@@ -499,7 +501,7 @@ const Home = () => {
             {/* 🗺️ MAP (LEFT - bigger) */}
             {/* 1. Removed bg-gray-900 from this outer div so it stays transparent/matches the page */}
            {/* 🗺️ MAP (LEFT - bigger) */}
-            <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 flex items-center justify-center bg-transparent">
+            <div ref={mapRef} className="lg:col-span-2 relative h-[600px] md:h-[800px] flex items-center justify-center bg-transparent">
               <motion.div
                 style={{
                   scale: mapScale,
