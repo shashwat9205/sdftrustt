@@ -263,14 +263,14 @@ const Home = () => {
       <section ref={focusRef} className="bg-bg-color relative flex justify-center py-4 overflow-hidden">
         <motion.div
           style={{ width: "100%", maxWidth: focusMaxWidth, borderRadius: focusBorderRadius, scale: focusScale }}
-          className="mx-auto bg-gray-900 text-center py-16 md:py-24 px-6 sm:px-12 lg:px-16 shadow-xl relative group"
+          className="mx-auto bg-accent text-center py-16 md:py-24 px-6 sm:px-12 lg:px-16 shadow-xl relative group"
         >
 
           <motion.h2
             initial={{ y: -20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-3xl font-serif text-white mb-12 relative z-10 inline-block px-4 bg-gray-900"
+            className="text-3xl font-serif text-white mb-12 relative z-10 inline-block px-4"
           >
             Our Focus Areas
           </motion.h2>
