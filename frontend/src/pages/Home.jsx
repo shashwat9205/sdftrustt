@@ -559,7 +559,7 @@ const Home = () => {
                       <ul className="space-y-3 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
                         {selectedMapState.projects.map((proj, idx) => (
                           <li key={idx} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm">
-                            <span className="text-primary text-lg leading-none">⚡</span>
+                            <span className="text-primary text-lg leading-none">•</span>
                             <span className="text-gray-700 font-medium text-sm leading-relaxed">{proj}</span>
                           </li>
                         ))}
