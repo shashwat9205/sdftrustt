@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
-import { API_BASE_URL, ADMIN_BASE_URL } from '../config';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 const MediaAndStories = () => {
   const [activeTab, setActiveTab] = useState('photos');
-  const location = useLocation(); 
-  
+  const location = useLocation();
+
+  // 🔥 NEW STATE: For the Image Modal
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
   // States for Photos
   const [medias, setMedias] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,7 +24,7 @@ const MediaAndStories = () => {
   useEffect(() => {
     if (location.hash) {
       const targetTab = location.hash.replace('#', '');
-      
+
       setTimeout(() => {
         setActiveTab(targetTab);
       }, 0);
@@ -40,15 +42,15 @@ const MediaAndStories = () => {
   useEffect(() => {
     const fetchMedia = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/media.php?t=${Date.now()}`);
+        const response = await fetch('http://localhost/backend/api/media.php');
         const data = await response.json();
-        
+
         if (data.status === 'success') {
           setMedias(data.data);
         } else {
           setError(data.message || 'Failed to fetch photos');
         }
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         setError('Could not connect to the database API. Check if your PHP server is running.');
       } finally {
@@ -63,9 +65,9 @@ const MediaAndStories = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/videos.php?t=${Date.now()}`);
+        const response = await fetch('http://localhost/backend/api/videos.php');
         const data = await response.json();
-        
+
         if (data.status === 'success') {
           setVideos(data.data);
         }
@@ -93,25 +95,25 @@ const MediaAndStories = () => {
 
   const pressCov = [
     {
-        id: 1,
-        tag: "The Daily Chronicle",
-        datee: "Sep 15, 2023",
-        title: "NGO Recognized for Exemplary Work in Sustainable Development",
-        image: "gallery/1.png",
-        para: "An independent review highlights the outstanding contributions made by the foundation in improving rural livelihood standards across 5 states, setting a benchmark for community-led initiatives..."
+      id: 1,
+      tag: "The Daily Chronicle",
+      datee: "Sep 15, 2023",
+      title: "NGO Recognized for Exemplary Work in Sustainable Development",
+      image: "gallery/1.png",
+      para: "An independent review highlights the outstanding contributions made by the foundation in improving rural livelihood standards across 5 states, setting a benchmark for community-led initiatives..."
     },
     {
-        id: 2,
-        tag: "The Daily Chronicle",
-        datee: "Sep 15, 2023",
-        title: "NGO Recognized for Exemplary Work in Sustainable Development",
-        image: "gallery/2.png",
-        para: "An independent review highlights the outstanding contributions made by the foundation in improving rural livelihood standards across 5 states, setting a benchmark for community-led initiatives..."
+      id: 2,
+      tag: "The Daily Chronicle",
+      datee: "Sep 15, 2023",
+      title: "NGO Recognized for Exemplary Work in Sustainable Development",
+      image: "gallery/2.png",
+      para: "An independent review highlights the outstanding contributions made by the foundation in improving rural livelihood standards across 5 states, setting a benchmark for community-led initiatives..."
     },
   ];
 
   return (
-    <div className="bg-white min-h-screen ">
+    <div className="bg-white min-h-screen relative">
       {/* Hero Section */}
       <section className="bg-primary text-white py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
@@ -146,8 +148,8 @@ const MediaAndStories = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-2 whitespace-nowrap font-bold flex items-center gap-2 border-b-2 transition-colors ${activeTab === tab.id
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
               >
                 <span>{tab.icon}</span> {tab.label}
@@ -184,9 +186,13 @@ const MediaAndStories = () => {
                 </div>
               ) : (
                 medias.map((media) => (
-                  <div key={media.id} className="aspect-square bg-gray-200 rounded-xl overflow-hidden relative group cursor-pointer">
+                  <div
+                    key={media.id}
+                    className="aspect-square bg-gray-200 rounded-xl overflow-hidden relative group cursor-pointer"
+                    onClick={() => setSelectedPhoto(`http://localhost/backend/admin/${media.image_url}`)} // 🔥 Added onClick handler
+                  >
                     <div className="absolute inset-0 bg-linear-to-br from-gray-300 to-gray-200 flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform duration-500">
-                      <img src={`${ADMIN_BASE_URL}${media.image_url}`} alt={media.title} className='w-full h-full object-cover' />
+                      <img src={`http://localhost/backend/admin/${media.image_url}`} alt={media.title} className='w-full h-full object-cover' />
                     </div>
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                       <span className="text-white font-bold bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">View</span>
@@ -197,12 +203,7 @@ const MediaAndStories = () => {
             </motion.div>
           )}
 
-
-
-
-
-          
-         {/* Video Gallery */}
+          {/* Video Gallery */}
           {activeTab === 'videos' && (
             <motion.div
               id="videos"
@@ -212,8 +213,8 @@ const MediaAndStories = () => {
             >
               {isVideoLoading ? (
                 <div className="col-span-full py-12 text-center text-gray-500 flex flex-col items-center">
-                   <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-                   Loading videos...
+                  <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+                  Loading videos...
                 </div>
               ) : videos.length === 0 ? (
                 <div className="col-span-full py-12 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
@@ -221,17 +222,17 @@ const MediaAndStories = () => {
                 </div>
               ) : (
                 videos.map((video) => (
-                  <a 
+                  <a
                     key={video.id}
-                    href={video.video_url} 
-                    target="_blank" 
+                    href={video.video_url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer"
                     onMouseEnter={() => setPlayingVideoId(video.id)}
                     onMouseLeave={() => setPlayingVideoId(null)}
                   >
                     <div className="aspect-video bg-gray-900 relative">
-                      
+
                       {playingVideoId === video.id ? (
                         <iframe
                           src={`${getYouTubeEmbedUrl(video.video_url)}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&disablekb=1`}
@@ -241,18 +242,18 @@ const MediaAndStories = () => {
                         ></iframe>
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <img 
-                            src={`${ADMIN_BASE_URL}${video.image_url}`} 
-                            alt={video.title} 
-                            className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300" 
+                          <img
+                            src={`http://localhost/backend/admin/${video.image_url}`}
+                            alt={video.title}
+                            className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-300"
                           />
-                          
+
                           {/* --- NEW PLAY BUTTON OVERLAY --- */}
                           <div className="absolute w-16 h-16 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg group-hover:bg-[#6a752b] group-hover:scale-110 transition-all duration-300 z-10">
                             {/* SVG Play Icon */}
-                            <svg 
-                              className="w-8 h-8 text-white ml-1" 
-                              fill="currentColor" 
+                            <svg
+                              className="w-8 h-8 text-white ml-1"
+                              fill="currentColor"
                               viewBox="0 0 24 24"
                             >
                               <path d="M8 5v14l11-7z" />
@@ -307,9 +308,30 @@ const MediaAndStories = () => {
               ))}
             </motion.div>
           )}
-          
+
         </div>
       </section>
+
+      {/* 🔥 NEW IMAGE MODAL */}
+      {selectedPhoto && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <button
+            className="absolute top-6 right-6 text-white text-5xl hover:text-gray-300 transition-colors z-50"
+            onClick={() => setSelectedPhoto(null)}
+          >
+            &times;
+          </button>
+          <img
+            src={selectedPhoto}
+            alt="Expanded View"
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()} // Prevents the modal from closing if you click the image itself
+          />
+        </div>
+      )}
     </div>
   );
 };
