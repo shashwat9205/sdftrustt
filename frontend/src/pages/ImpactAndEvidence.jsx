@@ -1,6 +1,17 @@
-
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
+// 🔥 Import Recharts components
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+// 🔥 Sample data for the chart (You can update these numbers)
+const impactData = [
+    { year: '2019', beneficiaries: 120000 },
+    { year: '2020', beneficiaries: 250000 },
+    { year: '2021', beneficiaries: 400000 },
+    { year: '2022', beneficiaries: 650000 },
+    { year: '2023', beneficiaries: 850000 },
+    { year: '2024', beneficiaries: 1050000 },
+];
 
 const ImpactAndEvidence = () => {
     return (
@@ -57,7 +68,7 @@ const ImpactAndEvidence = () => {
             <section id="beneficiaries" className="py-16 px-4">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-3xl font-bold text-text-primary text-center mb-12">Beneficiaries Reached</h2>
-                    <div className="bg-white rounded-3xl overflow-hidden shadow-lg flex flex-col md:flex-row">
+                    <div className="bg-white rounded-3xl overflow-hidden shadow-lg flex flex-col md:flex-row border border-gray-100">
                         <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-accent text-white">
                             <h3 className="text-2xl font-bold mb-4">Empowering the Vulnerable</h3>
                             <p className="mb-6 leading-relaxed">
@@ -78,10 +89,52 @@ const ImpactAndEvidence = () => {
                                 </li>
                             </ul>
                         </div>
-                        <div className="md:w-1/2 bg-gray-200 min-h-75 relative">
-                            {/* Placeholder for an image or chart */}
-                            <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                                IMAGE / CHART PLACEHOLDER
+                        
+                        {/* 🔥 NEW CHART SECTION */}
+                        <div className="md:w-1/2 bg-white min-h-87.5 p-6 md:p-10 flex flex-col justify-center relative">
+                            <h4 className="text-lg font-serif font-bold text-text-primary mb-6 text-center">Growth of Beneficiaries (2019-2024)</h4>
+                            <div className="w-full h-62.5 md:h-75">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={impactData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                                        <defs>
+                                            {/* Gradient matching your brand's primary color (#6a752b) */}
+                                            <linearGradient id="colorBeneficiaries" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#6a752b" stopOpacity={0.4}/>
+                                                <stop offset="95%" stopColor="#6a752b" stopOpacity={0}/>
+                                            </linearGradient>
+                                        </defs>
+                                        {/* Clean, minimal grid lines */}
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                                        <XAxis 
+                                            dataKey="year" 
+                                            axisLine={false} 
+                                            tickLine={false} 
+                                            tick={{fill: '#9ca3af', fontSize: 12}} 
+                                            dy={10} 
+                                        />
+                                        <YAxis 
+                                            axisLine={false} 
+                                            tickLine={false} 
+                                            tick={{fill: '#9ca3af', fontSize: 12}} 
+                                            tickFormatter={(value) => `${value / 1000}k`} 
+                                        />
+                                        {/* Beautiful hover tooltip */}
+                                        <Tooltip
+                                            contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                                            formatter={(value) => [new Intl.NumberFormat('en-IN').format(value), 'Lives Impacted']}
+                                            labelStyle={{ color: '#374151', fontWeight: 'bold', marginBottom: '4px' }}
+                                        />
+                                        <Area 
+                                            type="monotone" 
+                                            dataKey="beneficiaries" 
+                                            stroke="#6a752b" 
+                                            strokeWidth={3} 
+                                            fillOpacity={1} 
+                                            fill="url(#colorBeneficiaries)" 
+                                            activeDot={{ r: 6, fill: '#6a752b', stroke: '#fff', strokeWidth: 2 }}
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
                             </div>
                         </div>
                     </div>
@@ -146,10 +199,6 @@ const ImpactAndEvidence = () => {
                     </div>
                 </div>
             </section>
-
-            {/* Year-on-Year Growth */}
-            
-
         </div>
     );
 };
