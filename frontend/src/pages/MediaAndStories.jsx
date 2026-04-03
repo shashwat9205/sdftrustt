@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
+import { API_BASE_URL, ADMIN_BASE_URL } from '../config';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
@@ -42,7 +43,7 @@ const MediaAndStories = () => {
   useEffect(() => {
     const fetchMedia = async () => {
       try {
-        const response = await fetch('http://localhost/backend/api/media.php');
+       const response = await fetch(`${API_BASE_URL}/media.php?t=${Date.now()}`);
         const data = await response.json();
 
         if (data.status === 'success') {
@@ -65,7 +66,7 @@ const MediaAndStories = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await fetch('http://localhost/backend/api/videos.php');
+        const response = await fetch(`${API_BASE_URL}/video.php?t=${Date.now()}`);
         const data = await response.json();
 
         if (data.status === 'success') {
