@@ -8,9 +8,9 @@ const MediaAndStories = () => {
   const [activeTab, setActiveTab] = useState('photos');
   const location = useLocation(); 
   
-  // 🔥 NEW GALLERY MODAL STATES
-  const [selectedAlbum, setSelectedAlbum] = useState(null); // Array of images
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // 🔥 NEW CONTINUOUS GALLERY MODAL STATES
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   
   // States for Photos
   const [medias, setMedias] = useState([]);
@@ -95,7 +95,6 @@ const MediaAndStories = () => {
     return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
   };
 
-  // 🔥 Format Image URL Helper
   const getImageUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
@@ -103,29 +102,27 @@ const MediaAndStories = () => {
   };
 
   // 🔥 Gallery Navigation Handlers
-  const handlePrevImage = useCallback((e) => {
+  const handlePrevPhoto = useCallback((e) => {
     e?.stopPropagation();
-    if (!selectedAlbum) return;
-    setCurrentImageIndex((prev) => (prev === 0 ? selectedAlbum.length - 1 : prev - 1));
-  }, [selectedAlbum]);
+    setCurrentPhotoIndex((prev) => (prev === 0 ? medias.length - 1 : prev - 1));
+  }, [medias.length]);
 
-  const handleNextImage = useCallback((e) => {
+  const handleNextPhoto = useCallback((e) => {
     e?.stopPropagation();
-    if (!selectedAlbum) return;
-    setCurrentImageIndex((prev) => (prev === selectedAlbum.length - 1 ? 0 : prev + 1));
-  }, [selectedAlbum]);
+    setCurrentPhotoIndex((prev) => (prev === medias.length - 1 ? 0 : prev + 1));
+  }, [medias.length]);
 
-  // Keyboard navigation for the modal
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!selectedAlbum) return;
-      if (e.key === 'ArrowLeft') handlePrevImage();
-      if (e.key === 'ArrowRight') handleNextImage();
-      if (e.key === 'Escape') setSelectedAlbum(null);
+      if (!isPhotoModalOpen) return;
+      if (e.key === 'ArrowLeft') handlePrevPhoto();
+      if (e.key === 'ArrowRight') handleNextPhoto();
+      if (e.key === 'Escape') setIsPhotoModalOpen(false);
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedAlbum, handlePrevImage, handleNextImage]);
+  }, [isPhotoModalOpen, handlePrevPhoto, handleNextPhoto]);
 
   const pressCov = [
     {
@@ -219,31 +216,18 @@ const MediaAndStories = () => {
                   No active photos found at the moment.
                 </div>
               ) : (
-                medias.map((media) => (
+                medias.map((media, idx) => (
                   <div 
                     key={media.id} 
                     className="aspect-square bg-gray-200 rounded-xl overflow-hidden relative group cursor-pointer"
                     onClick={() => {
-                      // 🔥 Extract all sub-images if available, otherwise just use the cover image
-                      const allImages = media.images && media.images.length > 0 
-                        ? media.images.map(img => getImageUrl(img)) 
-                        : [getImageUrl(media.image_url)];
-                      
-                      setSelectedAlbum(allImages);
-                      setCurrentImageIndex(0);
+                      setCurrentPhotoIndex(idx);
+                      setIsPhotoModalOpen(true);
                     }}
                   >
                     <div className="absolute inset-0 bg-linear-to-br from-gray-300 to-gray-200 flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform duration-500">
-                      <img src={getImageUrl(media.image_url)} alt={media.title} className='w-full h-full object-cover' />
+                      <img src={getImageUrl(media.image_url)} alt={media.title || 'Gallery Image'} className='w-full h-full object-cover' />
                     </div>
-                    
-                    {/* Optional: Show icon if it has multiple images */}
-                    {media.images && media.images.length > 1 && (
-                      <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm z-10">
-                        1/{media.images.length}
-                      </div>
-                    )}
-
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                       <span className="text-white font-bold bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">View Gallery</span>
                     </div>
@@ -358,27 +342,27 @@ const MediaAndStories = () => {
         </div>
       </section>
 
-      {/* 🔥 NEW ADVANCED GALLERY MODAL */}
-      {selectedAlbum && (
+      {/* 🔥 THE CONTINUOUS GALLERY MODAL */}
+      {isPhotoModalOpen && medias.length > 0 && (
         <div 
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-4 backdrop-blur-md transition-opacity"
-          onClick={() => setSelectedAlbum(null)}
+          onClick={() => setIsPhotoModalOpen(false)}
         >
           {/* Close Button */}
           <button 
             className="absolute top-6 right-6 text-white/70 hover:text-white text-4xl font-light transition-colors z-50"
-            onClick={() => setSelectedAlbum(null)}
+            onClick={() => setIsPhotoModalOpen(false)}
           >
             &times;
           </button>
 
           {/* Main Image Container */}
-          <div className="relative flex items-center justify-center w-full max-w-5xl flex-1 max-h-[80vh]">
+          <div className="relative flex items-center justify-center w-full max-w-5xl flex-1 max-h-[75vh]">
             
-            {/* Prev Button (Only show if multiple images) */}
-            {selectedAlbum.length > 1 && (
+            {/* Prev Button */}
+            {medias.length > 1 && (
               <button 
-                onClick={handlePrevImage}
+                onClick={handlePrevPhoto}
                 className="absolute left-0 md:-left-12 text-white/50 hover:text-white bg-black/20 hover:bg-black/50 p-4 rounded-full backdrop-blur-sm transition-all z-50"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -386,20 +370,20 @@ const MediaAndStories = () => {
             )}
 
             <motion.img 
-              key={currentImageIndex} // forces re-render/animation on change
+              key={currentPhotoIndex} // forces animation on change
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              src={selectedAlbum[currentImageIndex]} 
-              alt={`Gallery Image ${currentImageIndex + 1}`} 
+              src={getImageUrl(medias[currentPhotoIndex].image_url)} 
+              alt="Gallery Image" 
               className="max-w-full max-h-full object-contain shadow-2xl rounded-sm"
-              onClick={(e) => e.stopPropagation()} // Keep modal open when clicking image
+              onClick={(e) => e.stopPropagation()} 
             />
 
-            {/* Next Button (Only show if multiple images) */}
-            {selectedAlbum.length > 1 && (
+            {/* Next Button */}
+            {medias.length > 1 && (
               <button 
-                onClick={handleNextImage}
+                onClick={handleNextPhoto}
                 className="absolute right-0 md:-right-12 text-white/50 hover:text-white bg-black/20 hover:bg-black/50 p-4 rounded-full backdrop-blur-sm transition-all z-50"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
@@ -407,30 +391,30 @@ const MediaAndStories = () => {
             )}
           </div>
 
-          {/* Thumbnails (Only show if multiple images) */}
-          {selectedAlbum.length > 1 && (
+          {/* Thumbnails (Shows ALL images in the gallery) */}
+          {medias.length > 1 && (
             <div 
-              className="w-full max-w-3xl mt-6 flex gap-2 overflow-x-auto py-2 custom-scrollbar justify-start md:justify-center px-4"
+              className="w-full max-w-4xl mt-6 flex gap-2 overflow-x-auto py-2 custom-scrollbar justify-start md:justify-center px-4"
               onClick={(e) => e.stopPropagation()}
             >
-              {selectedAlbum.map((imgUrl, idx) => (
+              {medias.map((media, idx) => (
                 <button
-                  key={idx}
-                  onClick={() => setCurrentImageIndex(idx)}
-                  className={`relative shrink-0 h-16 md:h-20 aspect-video rounded-md overflow-hidden transition-all duration-300 ${
-                    currentImageIndex === idx ? 'ring-2 ring-white scale-105 opacity-100' : 'opacity-40 hover:opacity-100'
+                  key={media.id}
+                  onClick={() => setCurrentPhotoIndex(idx)}
+                  className={`relative shrink-0 h-16 md:h-20 aspect-square rounded-md overflow-hidden transition-all duration-300 ${
+                    currentPhotoIndex === idx ? 'ring-2 ring-white scale-105 opacity-100' : 'opacity-40 hover:opacity-100'
                   }`}
                 >
-                  <img src={imgUrl} className="w-full h-full object-cover" alt={`Thumb ${idx + 1}`} />
+                  <img src={getImageUrl(media.image_url)} className="w-full h-full object-cover" alt={`Thumb ${idx + 1}`} />
                 </button>
               ))}
             </div>
           )}
 
           {/* Counter text */}
-          {selectedAlbum.length > 1 && (
+          {medias.length > 1 && (
              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/50 text-sm font-medium tracking-widest">
-               {currentImageIndex + 1} / {selectedAlbum.length}
+               {currentPhotoIndex + 1} / {medias.length}
              </div>
           )}
 
