@@ -1,19 +1,20 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
+// 🔥 UPDATED: Now an array of objects holding the image and its specific link
 const partners = [
-  "about/part3.png",
-  "about/part2.png",
-  "about/part.png",
-  "about/part3.png",
-  "about/part4.png",
-  "about/part3.png",
-  "about/part2.png",
-  "about/part.png",
-  "about/part3.png",
-  "about/part4.png",
-  "about/part.png",
-  "about/part2.png",
+  { img: "about/part3.png", link: "https://nerfmtti.nic.in/" },
+  { img: "about/part2.png", link: "https://ilcs.co.in/" },
+  { img: "about/part.png", link: "https://csauk.ac.in/en" },
+  { img: "about/part3.png", link: "https://nerfmtti.nic.in/" },
+  { img: "about/part4.png", link: "https://asci-india.com/" },
+  { img: "about/part3.png", link: "https://nerfmtti.nic.in/" },
+  { img: "about/part2.png", link: "https://ilcs.co.in/" },
+  { img: "about/part.png", link: "https://csauk.ac.in/en" },
+  { img: "about/part3.png", link: "https://nerfmtti.nic.in/" },
+  { img: "about/part4.png", link: "https://asci-india.com/" },
+  { img: "about/part.png", link: "https://csauk.ac.in/en" },
+  { img: "about/part2.png", link: "https://ilcs.co.in/" },
 ];
 
 // Split the 12 logos into 6 unique arrays (2 logos per column)
@@ -65,17 +66,25 @@ const PartnersSection = () => {
                     }}
                     className="flex flex-col gap-10 absolute left-0 right-0 w-full"
                   >
-                    {loopItems.map((logo, index) => (
+                    {loopItems.map((partner, index) => (
                       <div
                         key={`${colIndex}-${index}`}
-                        className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-center shrink-0 w-full aspect-4/3"
+                        className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-center shrink-0 w-full aspect-4/3 hover:shadow-md transition-shadow group"
                       >
-                        <img
-                          src={logo}
-                          alt="partner"
-                          // Full color, vivid sizing!
-                          className="w-[80%] h-auto max-h-25 object-contain"
-                        />
+                        {/* 🔥 UPDATED: Wrapped the image in an anchor tag */}
+                        <a 
+                          href={partner.link} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center h-full"
+                        >
+                          <img
+                            src={partner.img}
+                            alt="partner"
+                            // Full color, vivid sizing! Added hover effect.
+                            className="w-[80%] h-auto max-h-25 object-contain group-hover:scale-105 transition-transform"
+                          />
+                        </a>
                       </div>
                     ))}
                   </motion.div>
