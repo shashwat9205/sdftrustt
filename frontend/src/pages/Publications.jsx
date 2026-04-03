@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import { useLocation } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
 const Publications = () => {
   const location = useLocation();
@@ -8,11 +10,40 @@ const Publications = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 🔥 NEW GALLERY MODAL STATES
+  const [selectedAlbum, setSelectedAlbum] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const getFullUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
     return `${ADMIN_BASE_URL}${path}`;
   };
+
+  // 🔥 Gallery Navigation Handlers
+  const handlePrevImage = useCallback((e) => {
+    e?.stopPropagation();
+    if (!selectedAlbum) return;
+    setCurrentImageIndex((prev) => (prev === 0 ? selectedAlbum.length - 1 : prev - 1));
+  }, [selectedAlbum]);
+
+  const handleNextImage = useCallback((e) => {
+    e?.stopPropagation();
+    if (!selectedAlbum) return;
+    setCurrentImageIndex((prev) => (prev === selectedAlbum.length - 1 ? 0 : prev + 1));
+  }, [selectedAlbum]);
+
+  // Keyboard navigation for the modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!selectedAlbum) return;
+      if (e.key === 'ArrowLeft') handlePrevImage();
+      if (e.key === 'ArrowRight') handleNextImage();
+      if (e.key === 'Escape') setSelectedAlbum(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedAlbum, handlePrevImage, handleNextImage]);
 
   useEffect(() => {
     if (location.hash) {
@@ -74,7 +105,7 @@ const Publications = () => {
   const galleries = publications.filter(p => p.type === 'gallery');
 
   return (
-    <div className="bg-bg-color min-h-screen">
+    <div className="bg-bg-color min-h-screen relative">
       <section className="bg-primary text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">Publications & Resources</h1>
@@ -146,8 +177,28 @@ const Publications = () => {
           {galleries.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
              {galleries.map((gallery) => (
-               <div key={gallery.id} className="aspect-square bg-gray-200 rounded-lg overflow-hidden group cursor-pointer relative">
+               <div 
+                  key={gallery.id} 
+                  className="aspect-square bg-gray-200 rounded-lg overflow-hidden group cursor-pointer relative"
+                  onClick={() => {
+                    // Extract all sub-images if available, otherwise use cover image
+                    const allImages = gallery.images && gallery.images.length > 0 
+                      ? gallery.images.map(img => getFullUrl(img)) 
+                      : [getFullUrl(gallery.image_url)];
+                    
+                    setSelectedAlbum(allImages);
+                    setCurrentImageIndex(0);
+                  }}
+               >
                  <img src={getFullUrl(gallery.image_url)} alt="Gallery" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                 
+                 {/* Optional: Show icon if it has multiple images */}
+                 {gallery.images && gallery.images.length > 1 && (
+                    <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm z-10">
+                      1/{gallery.images.length}
+                    </div>
+                 )}
+
                  <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-center justify-center">
                     <span className="text-white opacity-0 group-hover:opacity-100 text-3xl transition-opacity">👁️</span>
                  </div>
@@ -160,6 +211,85 @@ const Publications = () => {
         </section>
 
       </div>
+
+      {/* 🔥 ADVANCED GALLERY MODAL */}
+      {selectedAlbum && (
+        <div 
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 p-4 backdrop-blur-md transition-opacity"
+          onClick={() => setSelectedAlbum(null)}
+        >
+          {/* Close Button */}
+          <button 
+            className="absolute top-6 right-6 text-white/70 hover:text-white text-4xl font-light transition-colors z-50"
+            onClick={() => setSelectedAlbum(null)}
+          >
+            &times;
+          </button>
+
+          {/* Main Image Container */}
+          <div className="relative flex items-center justify-center w-full max-w-5xl flex-1 max-h-[80vh]">
+            
+            {/* Prev Button (Only show if multiple images) */}
+            {selectedAlbum.length > 1 && (
+              <button 
+                onClick={handlePrevImage}
+                className="absolute left-0 md:-left-12 text-white/50 hover:text-white bg-black/20 hover:bg-black/50 p-4 rounded-full backdrop-blur-sm transition-all z-50"
+              >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+              </button>
+            )}
+
+            <motion.img 
+              key={currentImageIndex} // forces re-render/animation on change
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              src={selectedAlbum[currentImageIndex]} 
+              alt={`Gallery Image ${currentImageIndex + 1}`} 
+              className="max-w-full max-h-full object-contain shadow-2xl rounded-sm"
+              onClick={(e) => e.stopPropagation()} // Keep modal open when clicking image
+            />
+
+            {/* Next Button (Only show if multiple images) */}
+            {selectedAlbum.length > 1 && (
+              <button 
+                onClick={handleNextImage}
+                className="absolute right-0 md:-right-12 text-white/50 hover:text-white bg-black/20 hover:bg-black/50 p-4 rounded-full backdrop-blur-sm transition-all z-50"
+              >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+              </button>
+            )}
+          </div>
+
+          {/* Thumbnails (Only show if multiple images) */}
+          {selectedAlbum.length > 1 && (
+            <div 
+              className="w-full max-w-3xl mt-6 flex gap-2 overflow-x-auto py-2 custom-scrollbar justify-start md:justify-center px-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {selectedAlbum.map((imgUrl, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentImageIndex(idx)}
+                  className={`relative shrink-0 h-16 md:h-20 aspect-video rounded-md overflow-hidden transition-all duration-300 ${
+                    currentImageIndex === idx ? 'ring-2 ring-white scale-105 opacity-100' : 'opacity-40 hover:opacity-100'
+                  }`}
+                >
+                  <img src={imgUrl} className="w-full h-full object-cover" alt={`Thumb ${idx + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Counter text */}
+          {selectedAlbum.length > 1 && (
+             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/50 text-sm font-medium tracking-widest">
+               {currentImageIndex + 1} / {selectedAlbum.length}
+             </div>
+          )}
+
+        </div>
+      )}
     </div>
   );
 };
