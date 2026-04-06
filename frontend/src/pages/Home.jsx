@@ -182,9 +182,9 @@ const Home = () => {
                   🌱
                 </div>
                 <h2 className="text-3xl md:text-4xl font-serif text-text-primary leading-tight">
-                  Why
+                  Why Sustainable
                   <br />
-                  Sustainable Development Foundation?
+                  Development Foundation?
                 </h2>
               </div>
 
