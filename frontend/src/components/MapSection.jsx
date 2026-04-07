@@ -37,6 +37,7 @@ const MapSection = ({ onStateSelect }) => {
             .then((res) => {
                 const projects = res.data;
 
+
                 projects.forEach((p) => {
                     // .trim() removes accidental spaces like "Delhi " -> "Delhi"
                     const state = p.location ? p.location.trim() : "";
@@ -78,7 +79,7 @@ const MapSection = ({ onStateSelect }) => {
                 weight: 1.5,
                 fillColor: hasProjects ? "#576123" : "#333333", 
                 fillOpacity: hasProjects ? 0.95 : 0.7,
-                className: "state-feature transition-all duration-300 origin-center" // 🔥 Added custom class for CSS targeting
+                className: "state-feature transition-all duration-300 origin-center" 
             };
         }
 
