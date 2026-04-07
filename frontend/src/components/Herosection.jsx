@@ -156,14 +156,14 @@ function Herosection() {
 
       {/* ✅ SVG CURVE */}
       <div className="absolute -bottom-20 md:-bottom-12 w-full overflow-hidden leading-none z-10 pointer-events-none">
-        <svg
+       <svg
           className="w-full h-24 md:h-32 lg:h-40"
           viewBox="0 0 1440 320"
           preserveAspectRatio="none"
         >
           <path
             fill="#F9F6EA"
-            d="M0,160L48,176C96,192,192,224,288,218.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,229.3C1248,245,1344,235,1392,229.3L1440,224L1440,320L0,320Z"
+            d="M0,160 L48,176 C96,192, 192,224, 288,218.7 C384,213, 480,171, 576,149.3 C672,128, 768,128, 864,149.3 C960,171, 1056,213, 1152,218.7 C1248,224, 1344,192, 1392,176 L1440,160 L1440,320 L0,320 Z"
           />
         </svg>
       </div>
