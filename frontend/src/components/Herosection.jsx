@@ -109,30 +109,30 @@ function Herosection() {
         </div>
       </div>
 
-      {/* 🎯 3-ITEM PERFECT CURVED SLIDER */}
-      <div
-        // 🔥 LIFTED the entire container slightly (bottom-24 instead of bottom-20)
-        className="absolute bottom-24 md:bottom-20 left-0 w-full z-30 flex justify-center items-center"
+     
+     <div
+        className="absolute bottom-24 md:bottom-24 left-0 w-full z-30 flex justify-center items-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {/* 🔥 INCREASED GAP so the side images reach the actual SVG valleys */}
-        <div className="flex items-center justify-center gap-6 md:gap-14 w-full px-4">
+        <div className="flex items-center justify-center gap-8 md:gap-24 w-full px-4">
 
           {heroCards.length > 0 &&
             [-1, 0, 1].map((offset) => {
-              // Calculate correct wrapping index
+
               const index = (activeIndex + offset + heroCards.length) % heroCards.length;
               const card = heroCards[index];
 
-              // 🔥 RECALIBRATED CURVE MATH
               let curveClasses = "";
               if (offset === 0) {
-                // Center: Pulled up perfectly to sit on the peak
-                curveClasses = "scale-110 md:scale-125 border-[3px] md:border-4 border-yellow-400 z-30 opacity-100 shadow-2xl -translate-y-6 md:-translate-y-10";
-              } else if (offset === -1 || offset === 1) {
-                // Left & Right: Pushed down *just enough* to sit in the valley, without sinking into the white
-                curveClasses = "scale-95 md:scale-100 opacity-80 z-20 hover:opacity-100 shadow-lg translate-y-2 md:translate-y-4";
+                // Center
+                curveClasses = "scale-110 md:scale-125 border-[3px] md:border-4 border-yellow-400 z-30 opacity-100 shadow-2xl translate-y-6 md:translate-y-8";
+              } else if (offset === -1) {
+                //  Left Thumbnail
+                curveClasses = "scale-95 md:scale-100 opacity-50 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 -rotate-4 md:-rotate-8";
+              } else if (offset === 1) {
+                //  Right Thumbnail
+                curveClasses = "scale-95 md:scale-100 opacity-50 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 rotate-4 md:rotate-8";
               }
 
               return (
