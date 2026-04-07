@@ -8,6 +8,13 @@ const Programs = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const searchParams = new URLSearchParams(location.search);
+  const filterId = searchParams.get('filter');
+
+  const displayPrograms = filterId 
+    ? programsList.filter(p => (p.program_id || '').toLowerCase().trim() === filterId.toLowerCase().trim())
+    : programsList;
+
   useEffect(() => {
     if (location.hash) {
       const el = document.querySelector(location.hash);
@@ -83,7 +90,12 @@ const Programs = () => {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {programsList.map((program, idx) => (
+          {displayPrograms.length === 0 && !loading && (
+            <div className="col-span-full py-12 text-center text-gray-500 bg-white rounded-xl shadow-sm border border-gray-100">
+              No programs found for this category.
+            </div>
+          )}
+          {displayPrograms.map((program, idx) => (
             <div
               key={program.id || idx}
               id={program.program_id}
@@ -124,7 +136,7 @@ const Programs = () => {
                   to={`/programdetails/${program.slug}`}
                   className="text-primary font-bold hover:text-secondary uppercase tracking-wider text-sm self-start transition-colors mt-6"
                 >
-                  Explore Programme &rarr;
+                  Explore Project &rarr;
                 </Link>
               </div>
             </div>

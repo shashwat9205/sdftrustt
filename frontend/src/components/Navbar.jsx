@@ -1,9 +1,39 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeMobileMenu, setActiveMobileMenu] = useState(null);
+  const [dynamicPrograms, setDynamicPrograms] = useState([]);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/programs.php?t=${Date.now()}`);
+        const data = await response.json();
+        if (data.status === 'success') {
+          const uniquePrograms = [];
+          const seen = new Set();
+          for (const prog of data.data) {
+            const normalizedId = (prog.program_id || '').toLowerCase().trim();
+            if (!seen.has(normalizedId)) {
+              seen.add(normalizedId);
+              uniquePrograms.push({
+                label: prog.title,
+                path: `/programs?filter=${encodeURIComponent(normalizedId)}`,
+                icon: prog.icon || '📌'
+              });
+            }
+          }
+          setDynamicPrograms(uniquePrograms);
+        }
+      } catch (error) {
+        console.error("Failed to fetch programs for navbar", error);
+      }
+    };
+    fetchPrograms();
+  }, []);
 
   const toggleMobileMenu = (menu) => {
     setActiveMobileMenu(activeMobileMenu === menu ? null : menu);
@@ -30,24 +60,19 @@ const Navbar = () => {
       name: 'Programs',
       path: '/programs',
       hasDropdown: true,
-      dropdownItems: [
-        { label: 'Health & Nutrition', path: '/programs#health', icon: '🏥' },
-        { label: 'Education', path: '/programs#education', icon: '📚' },
-        { label: 'Livelihoods', path: '/programs#livelihoods', icon: '💼' },
-        { label: 'Women Empowerment', path: '/programs#women', icon: '👩🏽‍🎓' },
-        { label: 'Agriculture', path: '/programs#agriculture', icon: '🌾' },
-        { label: 'Environment & WASH', path: '/programs#environment', icon: '🚰' },
+      dropdownItems: dynamicPrograms.length > 0 ? dynamicPrograms : [
+        { label: 'Loading...', path: '/programs', icon: '⏳' }
       ],
     },
     {
-      name: 'Our Work',
+      name: 'Our Projects',
       path: '/projects',
-      hasDropdown: true,
-      dropdownItems: [
-        { label: 'Ongoing Projects', path: '/projects#ongoing', icon: '🏢' },
-        { label: 'State-wise Listings', path: '/projects#listings', icon: '🗺️' },
-        { label: 'Impact Snapshot', path: '/projects#impact', icon: '📊' },
-      ],
+      // hasDropdown: true,
+      // dropdownItems: [
+      //   { label: 'Ongoing Projects', path: '/projects#ongoing', icon: '🏢' },
+      //   { label: 'State-wise Listings', path: '/projects#listings', icon: '🗺️' },
+      //   { label: 'Impact Snapshot', path: '/projects#impact', icon: '📊' },
+      // ],
     },
     {
       name: 'Publications',
