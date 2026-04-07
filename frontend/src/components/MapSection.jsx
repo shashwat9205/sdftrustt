@@ -78,6 +78,7 @@ const MapSection = ({ onStateSelect }) => {
                 weight: 1.5,
                 fillColor: hasProjects ? "#576123" : "#333333", 
                 fillOpacity: hasProjects ? 0.95 : 0.7,
+                className: "state-feature transition-all duration-300 origin-center" // 🔥 Added custom class for CSS targeting
             };
         }
 
@@ -92,18 +93,32 @@ const MapSection = ({ onStateSelect }) => {
 
         function highlightFeature(e) {
             const layer = e.target;
+            
+            // Dim others slightly
             geoLayer.eachLayer((l) => {
                 l.setStyle({ fillOpacity: 0.3 });
             });
+            
             layer.setStyle(highlightStyle());
-            layer.setStyle({ fillOpacity: 1 });
             layer.bringToFront();
+            
+            // 🔥 Manually add the scale class to the SVG element representing the layer
+            if (layer._path) {
+                layer._path.classList.add("state-hovered");
+            }
         }
 
-        function resetHighlight() {
+        function resetHighlight(e) {
+            const layer = e.target;
+            
             geoLayer.eachLayer((l) => {
                 geoLayer.resetStyle(l);
             });
+            
+            // 🔥 Remove the scale class
+            if (layer._path) {
+                layer._path.classList.remove("state-hovered");
+            }
         }
 
         function onEachFeature(feature, layer) {
@@ -158,7 +173,21 @@ const MapSection = ({ onStateSelect }) => {
 
     return (
         <>
-            <style>{`.leaflet-container { background: transparent !important; }`}</style>
+            {/* 🔥 Added CSS for the pop-up effect */}
+            <style>{`
+                .leaflet-container { background: transparent !important; }
+                
+                /* State hover animation */
+                path.state-feature {
+                    transition: transform 0.2s ease, fill 0.2s ease, fill-opacity 0.2s ease;
+                    transform-origin: center;
+                }
+                
+                path.state-hovered {
+                    transform: scale(1.02); /* Adjust this value for more/less pop (1.05 is quite a bit) */
+                    filter: drop-shadow(0px 10px 8px rgba(0, 0, 0, 0.4)); /* Adds a shadow underneath to enhance the 3D look */
+                }
+            `}</style>
             <div
                 id="map"
                 style={{
