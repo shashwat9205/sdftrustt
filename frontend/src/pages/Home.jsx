@@ -181,13 +181,11 @@ const Home = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-2xl shadow-sm animate-float">
                   🌱
                 </div>
-                <h3 className="text-xl md:text-3xl font-serif text-text-primary leading-tight">
+                <h2 className="text-3xl md:text-3xl font-serif text-text-primary leading-tight">
                   Why Sustainable
                   <br />
-                   Development Foundation?
-                  
-                  
-                </h3>
+                  Development Foundation ?
+                </h2>
               </div>
 
               <p className="text-gray-600 mb-6 leading-relaxed">
@@ -223,17 +221,17 @@ const Home = () => {
                 {
                   title: "Water Conservation",
                   info: "Lorem ipsum dolor sit amet ociae idu ailsing elit, sed dini net gamtz.",
-                  img: "about/2.jpg",
+                  img: "about/6.png",
                 },
                 {
                   title: "Sustainable Agriculture",
                   info: "Lorem ipsum dolor sit amet ociae idu ailsing elit, sed dini net gamtz.",
-                  img: "about/2.jpg",
+                  img: "about/3.png",
                 },
                 {
                   title: "Community Development",
                   info: "Lorem ipsum dolor sit amet ociae idu ailsing elit, sed dini net gamtz.",
-                  img: "about/2.jpg",
+                  img: "about/5.png",
                 },
               ].map((card, idx) => (
                 <div
