@@ -79,3 +79,12 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Add this to your App.css */
+.group\/link span:last-child {
+  text-transform: lowercase;
+}
+
+.group\/link span:last-child::first-letter {
+  text-transform: uppercase;
+}

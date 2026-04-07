@@ -7,7 +7,7 @@ const Navbar = () => {
   const [activeMobileMenu, setActiveMobileMenu] = useState(null);
   const [dynamicPrograms, setDynamicPrograms] = useState([]);
 
- useEffect(() => {
+useEffect(() => {
   const fetchPrograms = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/programs.php?t=${Date.now()}`);
@@ -16,6 +16,14 @@ const Navbar = () => {
         const uniquePrograms = [];
         const seen = new Set();
 
+        // 1. Define the capitalization helper
+        const formatLabel = (str) => {
+          if (!str) return "";
+          // Replaces underscores/hyphens with spaces, then fixes casing
+          const cleaned = str.replace(/[_-]/g, " ");
+          return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+        };
+
         for (const prog of data.data) {
           const rawId = (prog.program_id || '').trim();
           const normalizedId = rawId.toLowerCase();
@@ -23,10 +31,9 @@ const Navbar = () => {
           if (rawId && !seen.has(normalizedId)) {
             seen.add(normalizedId);
             uniquePrograms.push({
-              // 🔥 CHANGE THIS LINE: Use rawId instead of prog.title
-              label: rawId, 
+              // 2. APPLY THE FORMATTING HERE 👇
+              label: formatLabel(rawId), 
               
-              // This ensures the link matches your filter hash exactly
               path: `/programs#${normalizedId}`, 
               icon: prog.icon || '📌'
             });
