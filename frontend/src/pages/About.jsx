@@ -74,41 +74,45 @@ const About = () => {
           <div className="w-24 h-1 bg-accent mx-auto"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white p-8 rounded-xl shadow-sm text-center border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="bg-[#F9F6EA] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-sm">
-              💡
-            </div>
-            <h3 className="text-xl font-serif text-text-primary mb-4">
-              Our Vision
-            </h3>
-            <p className="text-gray-600">
-              To create a sustainable and equitable world where every community
-              thrives in harmony with nature.
-            </p>
-          </div>
-          <div
-            className="bg-white p-2 rounded-xl shadow-sm border border-gray-100 
-            hover:shadow-md transition-all duration-300 overflow-hidden"
-          >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          {/* Our Vision */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
             <img
-              src="/about/3.png" // 👉 change your image path
-              alt="mission"
-              className="w-full h-full object-cover rounded-lg 
-    transition-transform duration-300 hover:scale-105"
+              src="/about/5.png" // 👉 change image
+              alt="Our Vision"
+              className="w-full h-58 object-cover transition-transform duration-300 hover:scale-105"
             />
-          </div>
-          <div className="bg-white p-8 rounded-xl shadow-sm text-center border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-sm">
-              🎯
+
+            <div className="p-6 text-center">
+              <h3 className="text-xl font-serif text-text-primary mb-4">
+               💡 Our Vision
+              </h3>
+
+              <p className="text-gray-600">
+                To create a sustainable and equitable world where every
+                community thrives in harmony with nature.
+              </p>
             </div>
-            <h3 className="text-xl font-serif text-text-primary mb-4">
-              Our Mission
-            </h3>
-            <p className="text-gray-600">
-              Empowering marginalized communities through integrated development
-              programs and sustainable practices.
-            </p>
+          </div>
+
+          {/* Our Mission */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
+            <img
+              src="/about/3.png" // 👉 change image
+              alt="Our Mission"
+              className="w-full h-58 object-cover transition-transform duration-300 hover:scale-105"
+            />
+
+            <div className="p-6 text-center">
+              <h3 className="text-xl font-serif text-text-primary mb-4">
+                🎯 Our Mission
+              </h3>
+
+              <p className="text-gray-600">
+                Empowering marginalized communities through integrated
+                development programs and sustainable practices.
+              </p>
+            </div>
           </div>
         </div>
 

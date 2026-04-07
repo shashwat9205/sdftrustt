@@ -7,41 +7,43 @@ const Navbar = () => {
   const [activeMobileMenu, setActiveMobileMenu] = useState(null);
   const [dynamicPrograms, setDynamicPrograms] = useState([]);
 
-  useEffect(() => {
-    const fetchPrograms = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/programs.php?t=${Date.now()}`);
-        const data = await response.json();
-        if (data.status === 'success') {
-          const uniquePrograms = [];
-          const seen = new Set();
-          for (const prog of data.data) {
-            const normalizedId = (prog.program_id || '').toLowerCase().trim();
-            if (!seen.has(normalizedId)) {
-              seen.add(normalizedId);
-              uniquePrograms.push({
-                label: prog.title,
-                path: `/programs?filter=${encodeURIComponent(normalizedId)}`,
-                icon: prog.icon || '📌'
-              });
-            }
+ useEffect(() => {
+  const fetchPrograms = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/programs.php?t=${Date.now()}`);
+      const data = await response.json();
+      if (data.status === 'success') {
+        const uniquePrograms = [];
+        const seen = new Set();
+
+        for (const prog of data.data) {
+          const rawId = (prog.program_id || '').trim();
+          const normalizedId = rawId.toLowerCase();
+
+          if (rawId && !seen.has(normalizedId)) {
+            seen.add(normalizedId);
+            uniquePrograms.push({
+              // 🔥 CHANGE THIS LINE: Use rawId instead of prog.title
+              label: rawId, 
+              
+              // This ensures the link matches your filter hash exactly
+              path: `/programs#${normalizedId}`, 
+              icon: prog.icon || '📌'
+            });
           }
-          setDynamicPrograms(uniquePrograms);
         }
-      } catch (error) {
-        console.error("Failed to fetch programs for navbar", error);
+        setDynamicPrograms(uniquePrograms);
       }
-    };
-    fetchPrograms();
-  }, []);
+    } catch (error) {
+      console.error("Failed to fetch programs for navbar", error);
+    }
+  };
+  fetchPrograms();
+}, []);
 
   const toggleMobileMenu = (menu) => {
     setActiveMobileMenu(activeMobileMenu === menu ? null : menu);
   };
-
-
-
-
 
   const menuItems = [
     {
@@ -95,7 +97,6 @@ const Navbar = () => {
       ],
     },
     {
-      
       name: 'Get Involved',
       path: '/get-involved',
       hasDropdown: true,
@@ -118,7 +119,6 @@ const Navbar = () => {
               <div className=" p-2 rounded-full flex items-center justify-center size-60">
                 <img src="/logo/logo-bg.png" alt="SDF Logo" />
               </div>
-
             </Link>
           </div>
 
@@ -155,11 +155,11 @@ const Navbar = () => {
             ))}
             <div className="pl-4">
               <Link
-  to="/donate"
-  className="inline-flex items-center justify-center bg-accent hover:bg-[#237586] text-white px-6 py-2.5 rounded-full font-bold transition-all shadow-sm hover:-translate-y-0.5 hover:shadow-md ml-2"
->
-  Donate
-</Link>
+                to="/donate"
+                className="inline-flex items-center justify-center bg-accent hover:bg-[#237586] text-white px-6 py-2.5 rounded-full font-bold transition-all shadow-sm hover:-translate-y-0.5 hover:shadow-md ml-2"
+              >
+                Donate
+              </Link>
             </div>
           </div>
 

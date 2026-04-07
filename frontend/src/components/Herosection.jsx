@@ -50,7 +50,7 @@ function Herosection() {
 
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % heroCards.length);
-    }, 15000);
+    }, 5000); // 🔥 smoother UX
 
     return () => clearInterval(intervalRef.current);
   }, [heroCards]);
@@ -61,7 +61,7 @@ function Herosection() {
   const handleMouseLeave = () => {
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % heroCards.length);
-    }, 15000);
+    }, 5000);
   };
 
   // 🎥 Active Video
@@ -72,10 +72,11 @@ function Herosection() {
   return (
     <section className="relative bg-black overflow-hidden pb-32">
 
-      {/* 🎥 VIDEO (UPDATED: Fixed aspect ratio cropping for ultrawide screens) */}
+      {/* 🎥 VIDEO */}
       <div className="absolute inset-0 z-0 overflow-hidden bg-black">
         {activeVideo ? (
           <iframe
+            key={activeVideo} // 🔥 important for rerender
             className="absolute top-1/2 left-1/2 w-screen h-[56.25vw] min-h-screen min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1&mute=1&controls=0&loop=1&playlist=${activeVideo}`}
             title="Banner Video"
@@ -84,7 +85,7 @@ function Herosection() {
             allowFullScreen
           />
         ) : (
-           <div className="absolute inset-0 bg-gray-900"></div> // Fallback if no video
+          <div className="absolute inset-0 bg-gray-900"></div>
         )}
         <div className="absolute inset-0 bg-black/50"></div>
       </div>
@@ -92,13 +93,17 @@ function Herosection() {
       {/* 📝 CONTENT */}
       <div className="relative z-10 w-[95%] mx-auto min-h-150 flex items-center">
         <div className="max-w-2xl text-white pl-6 md:pl-10">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
-            Empowering Communities
-          </h1>
 
-          <p className="mb-8 text-gray-200 drop-shadow-md text-lg leading-relaxed">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis sunt consectetur, natus ratione tenetur excepturi in quidem distinctio sequi voluptatem, impedit minima. Inventore ipsa excepturi cupiditate, vitae quasi.
-          </p>
+          {/* 🔥 ANIMATED TEXT */}
+          <div key={activeIndex} className="animate-fadeSlide">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+              {heroCards[activeIndex]?.title || "Loading..."}
+            </h1>
+
+            <p className="mb-8 text-gray-200 drop-shadow-md text-lg leading-relaxed">
+              {heroCards[activeIndex]?.description || ""}
+            </p>
+          </div>
 
           <Link
             to="/about"
@@ -109,9 +114,9 @@ function Herosection() {
         </div>
       </div>
 
-      
-     <div
-        className="absolute bottom-24 md:bottom-24 left-0 w-full z-30 flex justify-center items-center"
+      {/* 🎯 THUMBNAILS */}
+      <div
+        className="absolute bottom-24 left-0 w-full z-30 flex justify-center items-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -125,14 +130,11 @@ function Herosection() {
 
               let curveClasses = "";
               if (offset === 0) {
-                // Center
                 curveClasses = "scale-110 md:scale-125 border-[3px] md:border-4 border-yellow-400 z-30 opacity-100 shadow-2xl translate-y-6 md:translate-y-8";
               } else if (offset === -1) {
-                //  Left Thumbnail
-                curveClasses = "scale-95 md:scale-100 opacity-65 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 -rotate-4 md:-rotate-8";
+                curveClasses = "scale-95 opacity-65 z-20 hover:opacity-100 shadow-lg translate-y-12 -rotate-6";
               } else if (offset === 1) {
-                //  Right Thumbnail
-                curveClasses = "scale-95 md:scale-100 opacity-65 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 rotate-4 md:rotate-8";
+                curveClasses = "scale-95 opacity-65 z-20 hover:opacity-100 shadow-lg translate-y-12 rotate-6";
               }
 
               return (
@@ -145,25 +147,26 @@ function Herosection() {
                     src={`${ADMIN_BASE_URL}${card?.image_url}`}
                     alt={card?.title || "Thumbnail"}
                     className="w-28 md:w-36 aspect-video object-cover"
-                    onError={(e) => { e.currentTarget.src = "https://via.placeholder.com/150x100?text=No+Image" }}
+                    onError={(e) => {
+                      e.currentTarget.src = "https://via.placeholder.com/150x100?text=No+Image";
+                    }}
                   />
                 </div>
               );
             })}
-
         </div>
       </div>
 
-      {/* ✅ SVG CURVE */}
+      {/* 🌊 SVG */}
       <div className="absolute -bottom-20 md:-bottom-12 w-full overflow-hidden leading-none z-10 pointer-events-none">
-       <svg
+        <svg
           className="w-full h-24 md:h-32 lg:h-40"
           viewBox="0 0 1440 320"
           preserveAspectRatio="none"
         >
           <path
             fill="#F9F6EA"
-            d="M0,160 L48,176 C96,192, 192,224, 288,218.7 C384,213, 480,171, 576,149.3 C672,128, 768,128, 864,149.3 C960,171, 1056,213, 1152,218.7 C1248,224, 1344,192, 1392,176 L1440,160 L1440,320 L0,320 Z"
+            d="M0,160 L48,176 C96,192,192,224,288,218.7C384,213,480,171,576,149.3C672,128,768,128,864,149.3C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,320L0,320Z"
           />
         </svg>
       </div>

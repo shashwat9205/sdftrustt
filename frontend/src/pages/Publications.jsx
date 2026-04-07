@@ -87,37 +87,38 @@ const Publications = () => {
       </section>
 
       {/* TABS */}
-      <section className="border-b sticky top-20 bg-white z-40">
-        <div className="max-w-xl mx-auto px-4">
-          <div className="flex space-x-8 overflow-x-auto">
+      {/* TABS */}
+<section className="border-b sticky top-20 bg-white z-40">
+  {/* I recommend changing max-w-xl to max-w-7xl to match your other pages */}
+  <div className="max-w-7xl mx-auto px-4"> 
+    
+    {/* ADD 'justify-center' HERE 👇 */}
+    <div className="flex justify-center space-x-8 overflow-x-auto no-scrollbar">
 
-            {[
-              { id: "annual-reports", label: "Reports 📊" },
-              { id: "case-studies", label: "Case Studies 📝" },
-              { id: "galleries", label: "Gallery 🖼️" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
+      {[
+        { id: "annual-reports", label: "Reports 📊" },
+        { id: "case-studies", label: "Case Studies 📝" },
+        { id: "galleries", label: "Gallery 🖼️" },
+      ].map((tab) => (
+        <button
+          key={tab.id}
+          onClick={() => {
+            setActiveTab(tab.id);
+            window.history.replaceState(null, "", `#${tab.id}`);
+          }}
+          className={`py-4 border-b-2 font-bold whitespace-nowrap transition-colors ${
+            activeTab === tab.id
+              ? "border-primary text-primary"
+              : "border-transparent text-gray-500 hover:text-primary"
+          }`}
+        >
+          {tab.label}
+        </button>
+      ))}
 
-                  // 🔥 OPTIONAL: update URL hash also
-                  window.history.replaceState(null, "", `#${tab.id}`);
-                }}
-                className={`py-4 border-b-2 font-bold ${
-                  activeTab === tab.id
-                    ? "border-primary text-primary"
-                    : "border-transparent text-gray-500"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-
-          </div>
-        </div>
-      </section>
-
+    </div>
+  </div>
+</section>
       {/* CONTENT */}
       <div className="max-w-7xl mx-auto px-4 py-12">
 
