@@ -129,10 +129,10 @@ function Herosection() {
                 curveClasses = "scale-110 md:scale-125 border-[3px] md:border-4 border-yellow-400 z-30 opacity-100 shadow-2xl translate-y-6 md:translate-y-8";
               } else if (offset === -1) {
                 //  Left Thumbnail
-                curveClasses = "scale-95 md:scale-100 opacity-50 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 -rotate-4 md:-rotate-8";
+                curveClasses = "scale-95 md:scale-100 opacity-65 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 -rotate-4 md:-rotate-8";
               } else if (offset === 1) {
                 //  Right Thumbnail
-                curveClasses = "scale-95 md:scale-100 opacity-50 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 rotate-4 md:rotate-8";
+                curveClasses = "scale-95 md:scale-100 opacity-65 z-20 hover:opacity-100 shadow-lg translate-y-12 md:translate-y-16 rotate-4 md:rotate-8";
               }
 
               return (
