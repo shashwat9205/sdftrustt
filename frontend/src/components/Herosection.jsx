@@ -72,11 +72,11 @@ function Herosection() {
   return (
     <section className="relative bg-black overflow-hidden pb-32">
 
-      {/* 🎥 VIDEO */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
+      {/* 🎥 VIDEO (UPDATED: Fixed aspect ratio cropping for ultrawide screens) */}
+      <div className="absolute inset-0 z-0 overflow-hidden bg-black">
         {activeVideo ? (
           <iframe
-            className="w-full h-full absolute top-0 left-0 scale-125 pointer-events-none"
+            className="absolute top-1/2 left-1/2 w-screen h-[56.25vw] min-h-screen min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             src={`https://www.youtube.com/embed/${activeVideo}?autoplay=1&mute=1&controls=0&loop=1&playlist=${activeVideo}`}
             title="Banner Video"
             frameBorder="0"
@@ -109,7 +109,7 @@ function Herosection() {
         </div>
       </div>
 
-     
+      
      <div
         className="absolute bottom-24 md:bottom-24 left-0 w-full z-30 flex justify-center items-center"
         onMouseEnter={handleMouseEnter}
