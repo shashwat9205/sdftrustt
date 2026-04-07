@@ -181,11 +181,13 @@ const Home = () => {
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-2xl shadow-sm animate-float">
                   🌱
                 </div>
-                <h2 className="text-3xl md:text-4xl font-serif text-text-primary leading-tight">
-                  About Our
+                <h3 className="text-xl md:text-3xl font-serif text-text-primary leading-tight">
+                  Why Sustainable
                   <br />
-                  Organization
-                </h2>
+                   Development Foundation?
+                  
+                  
+                </h3>
               </div>
 
               <p className="text-gray-600 mb-6 leading-relaxed">
