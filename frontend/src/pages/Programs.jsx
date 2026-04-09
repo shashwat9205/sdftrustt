@@ -4,8 +4,8 @@ import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
 const Programs = () => {
   const location = useLocation();
-  const scrollRef = useRef(null); 
-  
+  const scrollRef = useRef(null);
+
   const [programsList, setProgramsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,6 +22,7 @@ const Programs = () => {
   }, [location]);
 
   // FETCH DATA
+  // FETCH DATA
   useEffect(() => {
     const fetchPrograms = async () => {
       try {
@@ -31,6 +32,12 @@ const Programs = () => {
         const data = await response.json();
         if (data.status === "success") {
           setProgramsList(data.data);
+
+          // 🔥 SET DEFAULT TAB TO FIRST CATEGORY IF NO HASH EXISTS
+          if (!location.hash && data.data.length > 0) {
+            const firstCat = data.data[0].program_id?.trim().toLowerCase();
+            if (firstCat) setActiveTab(firstCat);
+          }
         } else {
           throw new Error(data.message || "Error fetching programs");
         }
@@ -41,13 +48,13 @@ const Programs = () => {
       }
     };
     fetchPrograms();
-  }, []);
+  }, [location.hash]);
 
   // 🔥 SCROLL LOGIC FOR ARROWS
   const scroll = (direction) => {
     if (scrollRef.current) {
       const { scrollLeft } = scrollRef.current;
-      const scrollAmount = 300; 
+      const scrollAmount = 300;
       const scrollTo = direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
 
       scrollRef.current.scrollTo({
@@ -57,9 +64,8 @@ const Programs = () => {
     }
   };
 
-  // 🔥 EXTRACT UNIQUE CATEGORIES
+  // 🔥 EXTRACT UNIQUE CATEGORIES (Removed "all")
   const uniqueCategories = [
-    "all",
     ...new Set(
       programsList
         .map((p) => p.program_id?.trim().toLowerCase())
@@ -74,12 +80,10 @@ const Programs = () => {
   };
 
   // 🔥 FILTER PROGRAMS
-  const displayPrograms =
-    activeTab === "all"
-      ? programsList
-      : programsList.filter(
-          (p) => (p.program_id || "").toLowerCase().trim() === activeTab.toLowerCase().trim()
-        );
+  // 🔥 FILTER PROGRAMS (Simplified)
+  const displayPrograms = programsList.filter(
+    (p) => (p.program_id || "").toLowerCase().trim() === activeTab.toLowerCase().trim()
+  );
 
   if (loading) {
     return (
@@ -102,7 +106,7 @@ const Programs = () => {
 
   return (
     <div className="bg-bg-color min-h-screen pb-20">
-      
+
       {/* HEADER SECTION */}
       <section className="bg-secondary text-white py-20 bg-opacity-90 relative">
         <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2000')] bg-cover bg-center"></div>
@@ -117,9 +121,9 @@ const Programs = () => {
       {/* 🔥 TABS SECTION WITH ARROWS */}
       <section className="border-b sticky top-20 bg-white z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative group">
-          
+
           {/* Left Arrow Button */}
-          <button 
+          <button
             onClick={() => scroll("left")}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow-lg rounded-full hover:bg-primary hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center w-10 h-10 border border-gray-100"
           >
@@ -127,7 +131,7 @@ const Programs = () => {
           </button>
 
           {/* Scrollable Tab Container */}
-          <div 
+          <div
             ref={scrollRef}
             /* px-12 gives room for arrows so they don't cover "All Programs" */
             className="flex items-center space-x-8 overflow-x-auto no-scrollbar scroll-smooth px-12"
@@ -140,11 +144,10 @@ const Programs = () => {
                   window.history.replaceState(null, "", `#${tabId}`);
                 }}
                 /* shrink-0 is vital so the text doesn't squash */
-                className={`py-4 border-b-2 font-bold whitespace-nowrap transition-colors shrink-0 ${
-                  activeTab === tabId
+                className={`py-4 border-b-2 font-bold whitespace-nowrap transition-colors shrink-0 ${activeTab === tabId
                     ? "border-primary text-primary"
                     : "border-transparent text-gray-500 hover:text-primary"
-                }`}
+                  }`}
               >
                 {formatTabLabel(tabId)}
               </button>
@@ -152,7 +155,7 @@ const Programs = () => {
           </div>
 
           {/* Right Arrow Button */}
-          <button 
+          <button
             onClick={() => scroll("right")}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow-lg rounded-full hover:bg-primary hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center w-10 h-10 border border-gray-100"
           >
@@ -165,7 +168,7 @@ const Programs = () => {
       {/* CONTENT GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          
+
           {displayPrograms.length === 0 && (
             <div className="col-span-full py-12 text-center text-gray-500 bg-white rounded-xl shadow-sm border border-gray-100">
               No programs found for this category.
@@ -196,7 +199,7 @@ const Programs = () => {
                   {program.title}
                 </h3>
 
-                <p className="text-gray-600 mb-6 grow">
+                <p className="text-gray-600 mb-6 grow line-clamp-4">
                   {program.description}
                 </p>
 

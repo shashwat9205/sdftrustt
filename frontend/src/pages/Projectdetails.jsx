@@ -180,6 +180,62 @@ const ProjectDetails = () => {
                     </p>
                   ))}
               </div>
+              
+              {project.goal && (
+                <div className="mt-12 mb-4 relative bg-linear-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-100 p-8 shadow-sm overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-10">
+                    <span className="text-8xl font-serif">"</span>
+                  </div>
+                  <div className="relative z-10 flex gap-4">
+                    <div className="w-1.5 rounded-full bg-primary shrink-0"></div>
+                    <div>
+                      <h3 className="font-serif text-primary font-bold mb-3 tracking-wide uppercase text-sm">Project Goal</h3>
+                      <p className="text-gray-800 text-xl font-serif italic leading-relaxed">
+                        {project.goal}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {project.activities && (
+                <div className="mt-12">
+                  <h3 className="text-2xl font-serif text-text-primary mb-6 flex items-center gap-3 border-b pb-4 border-gray-100">
+                    <div className="bg-blue-50 p-2 rounded-lg text-blue-500">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    Key Activities
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {project.activities.split("\n").filter(a => a.trim()).map((act, i) => (
+                      <div key={i} className="bg-white border border-gray-100 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                        <div className="mt-1 bg-green-100 text-primary w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-sm font-bold shadow-inner">✓</div>
+                        <p className="text-gray-700 leading-relaxed flex-1">{act}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {project.achievements && (
+                <div className="mt-12 mb-4">
+                  <h3 className="text-2xl font-serif text-text-primary mb-6 flex items-center gap-3 border-b pb-4 border-gray-100">
+                    <div className="bg-orange-50 p-2 rounded-lg text-orange-500">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                    </div>
+                    Major Achievements
+                  </h3>
+                  <div className="space-y-4">
+                    {project.achievements.split("\n").filter(a => a.trim()).map((ach, i) => (
+                      <div key={i} className="group relative bg-white border border-gray-100 p-5 rounded-xl shadow-sm hover:border-yellow-200 hover:bg-yellow-50/30 transition-all font-medium text-gray-700 flex items-center gap-5">
+                       <div className="bg-yellow-100 text-yellow-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-xl group-hover:scale-110 transition-transform shadow-sm">🏆</div>
+                       <p className="flex-1 leading-relaxed">{ach}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
 
@@ -189,7 +245,7 @@ const ProjectDetails = () => {
             <div className="sticky top-28 flex flex-col gap-6">
               
               {/* Quick Facts Widget */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8 bg-linear-to-b from-white to-gray-50/50">
                 <h3 className="text-xl font-serif font-bold text-text-primary border-b border-gray-100 pb-4 mb-6">
                   Project Overview
                 </h3>
@@ -224,6 +280,30 @@ const ProjectDetails = () => {
                       <p className="font-medium text-gray-800 capitalize">{project.status || "Active"}</p>
                     </div>
                   </li>
+                  
+                  {project.beneficiaries && (
+                  <li className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center shrink-0 text-lg">
+                      👥
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-0.5">Beneficiaries</p>
+                      <p className="font-medium text-gray-800">{project.beneficiaries}</p>
+                    </div>
+                  </li>
+                  )}
+                  
+                  {project.cost && (
+                  <li className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-green-50 text-green-500 flex items-center justify-center shrink-0 text-lg">
+                      💰
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-0.5">Total Cost</p>
+                      <p className="font-medium text-gray-800">{project.cost}</p>
+                    </div>
+                  </li>
+                  )}
                 </ul>
               </div>
 

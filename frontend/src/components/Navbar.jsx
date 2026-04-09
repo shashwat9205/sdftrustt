@@ -31,7 +31,6 @@ useEffect(() => {
           if (rawId && !seen.has(normalizedId)) {
             seen.add(normalizedId);
             uniquePrograms.push({
-              // 2. APPLY THE FORMATTING HERE 👇
               label: formatLabel(rawId), 
               
               path: `/programs#${normalizedId}`, 
@@ -67,7 +66,7 @@ useEffect(() => {
     },
     {
       name: 'Programs',
-      path: '/programs',
+      path: '/programs#health',
       hasDropdown: true,
       dropdownItems: dynamicPrograms.length > 0 ? dynamicPrograms : [
         { label: 'Loading...', path: '/programs', icon: '⏳' }

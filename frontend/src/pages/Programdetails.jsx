@@ -194,7 +194,7 @@ const ProgramDetails = () => {
       <section className="py-16 max-w-5xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="md:col-span-1 space-y-6">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 bg-linear-to-b from-white to-gray-50/50">
               <h3 className="text-lg font-serif font-bold text-text-primary mb-4 border-b pb-2">
                 Impact Summary
               </h3>
@@ -223,6 +223,31 @@ const ProgramDetails = () => {
                     </p>
                   </div>
                 </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🗺️</span>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase font-bold">
+                      Location
+                    </p>
+                    <p className="text-primary font-bold">
+                      {program.location || program.regions || "N/A"}
+                    </p>
+                  </div>
+                </div>
+
+                {program.cost && (
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">💰</span>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase font-bold">
+                      Total Cost
+                    </p>
+                    <p className="text-primary font-bold">
+                      {program.cost}
+                    </p>
+                  </div>
+                </div>
+                )}
               </div>
             </div>
 
@@ -249,14 +274,60 @@ const ProgramDetails = () => {
                 ))}
             </div>
 
-            <div className="mt-10 p-8 bg-[#E9EFE1] rounded-2xl border border-primary/10">
-              <h3 className="font-serif text-xl text-primary mb-2">Our Goal</h3>
-              <p className="text-gray-700 italic">
-                We aim to expand our reach and ensure that the benefits of{" "}
-                {program.title} reach every corner of our target regions by
-                2027.
-              </p>
-            </div>
+            {program.activities && (
+              <div className="mt-12">
+                <h3 className="text-2xl font-serif text-text-primary mb-6 flex items-center gap-3 border-b pb-4 border-gray-100">
+                  <div className="bg-blue-50 p-2 rounded-lg text-blue-500">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  </div>
+                  Key Activities
+                </h3>
+                <div className="flex flex-col gap-4">
+                  {program.activities.split("\n").filter(a => a.trim()).map((act, i) => (
+                    <div key={i} className="bg-white border border-gray-100 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+                      <div className="mt-1 bg-green-100 text-primary w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-sm font-bold shadow-inner">✓</div>
+                      <p className="text-gray-700 leading-relaxed flex-1">{act}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {program.achievements && (
+              <div className="mt-12 mb-4">
+                <h3 className="text-2xl font-serif text-text-primary mb-6 flex items-center gap-3 border-b pb-4 border-gray-100">
+                  <div className="bg-orange-50 p-2 rounded-lg text-orange-500">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                  </div>
+                  Program Achievements
+                </h3>
+                <div className="space-y-4">
+                  {program.achievements.split("\n").filter(a => a.trim()).map((ach, i) => (
+                    <div key={i} className="group relative bg-white border border-gray-100 p-5 rounded-xl shadow-sm hover:border-yellow-200 hover:bg-yellow-50/30 transition-all font-medium text-gray-700 flex items-center gap-5">
+                     <div className="bg-yellow-100 text-yellow-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-xl group-hover:scale-110 transition-transform shadow-sm">🏆</div>
+                     <p className="flex-1 leading-relaxed">{ach}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(program.goal || program.title) && (
+              <div className="mt-12 mb-4 relative bg-linear-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-100 p-8 shadow-sm overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-10">
+                  <span className="text-8xl font-serif">"</span>
+                </div>
+                <div className="relative z-10 flex gap-4">
+                  <div className="w-1.5 rounded-full bg-primary shrink-0"></div>
+                  <div>
+                    <h3 className="font-serif text-primary font-bold mb-3 tracking-wide uppercase text-sm">Program Goal</h3>
+                    <p className="text-gray-800 text-xl font-serif italic leading-relaxed">
+                      {program.goal || `We aim to expand our reach and ensure that the benefits of ${program.title} reach every corner of our target regions by 2027.`}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
