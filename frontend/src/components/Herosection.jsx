@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 
-// 🎯 Extract YouTube ID
 const getYoutubeId = (url) => {
   try {
     const parsed = new URL(url);
@@ -26,7 +25,6 @@ function Herosection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef(null);
 
-  // 🔥 Fetch API
   useEffect(() => {
     const fetchHeroCard = async () => {
       try {
@@ -44,7 +42,6 @@ function Herosection() {
     fetchHeroCard();
   }, []);
 
-  // 🔁 Auto Slide
   useEffect(() => {
     if (heroCards.length === 0) return;
 
@@ -55,7 +52,6 @@ function Herosection() {
     return () => clearInterval(intervalRef.current);
   }, [heroCards]);
 
-  // ⏸️ Hover Stop
   const handleMouseEnter = () => clearInterval(intervalRef.current);
 
   const handleMouseLeave = () => {
@@ -64,7 +60,6 @@ function Herosection() {
     }, 5000);
   };
 
-  // 🎥 Active Video
   const activeVideo = getYoutubeId(
     heroCards[activeIndex]?.youtube_link
   );
@@ -90,11 +85,11 @@ function Herosection() {
         <div className="absolute inset-0 bg-black/50"></div>
       </div>
 
-      {/* 📝 CONTENT */}
+      
       <div className="relative z-10 w-[95%] mx-auto min-h-150 flex items-center">
         <div className="max-w-2xl text-white pl-6 md:pl-10">
 
-          {/* 🔥 ANIMATED TEXT */}
+          
           <div key={activeIndex} className="animate-fadeSlide">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
               {heroCards[activeIndex]?.title || "Loading..."}
@@ -114,7 +109,7 @@ function Herosection() {
         </div>
       </div>
 
-      {/* 🎯 THUMBNAILS */}
+      
       <div
         className="absolute bottom-24 left-0 w-full z-30 flex justify-center items-center"
         onMouseEnter={handleMouseEnter}
