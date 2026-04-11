@@ -1,7 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-// eslint-disable-next-line no-unused-vars
-import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+ 
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionTemplate,
+} from "framer-motion";
 import { API_BASE_URL, ADMIN_BASE_URL } from "../config";
 import Herosection from "../components/Herosection";
 import Testimonials from "./Testimonials";
@@ -47,13 +52,12 @@ const Home = () => {
   const [programsLoading, setProgramsLoading] = useState(true);
   const [programsError, setProgramsError] = useState("");
 
-
   // 🔥 ADD IT RIGHT HERE:
   const [selectedMapState, setSelectedMapState] = useState(null);
 
-// Map Animation hooks
+  // Map Animation hooks
   const mapRef = useRef(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: mapRef,
     // 🔥 Changed to "start 90%": This makes the animation trigger EARLIER (higher up on the screen)
@@ -62,20 +66,16 @@ const Home = () => {
 
   // 🔥 Removed the delay (starts at 0 instead of 0.4) so it zooms smoothly right away.
   // Starts at 0.6 scale so the map of India fits perfectly in the frame.
-  const mapScale = useTransform(
-    scrollYProgress, 
-    [0, 0.7, 1], 
-    [0.6, 0.85, 1]
-  );
-  
+  const mapScale = useTransform(scrollYProgress, [0, 0.7, 1], [0.6, 0.85, 1]);
+
   // 🔥 Starts with a MUCH bigger circle (40%) so the map isn't cut off!
   // It grows to 60%, then rapidly bursts to 150% to fill the rectangle.
   const mapClipPercentage = useTransform(
-    scrollYProgress, 
-    [0, 0.7, 1], 
-    [40, 60, 150]
+    scrollYProgress,
+    [0, 0.7, 1],
+    [40, 60, 150],
   );
-  
+
   const mapClipPath = useMotionTemplate`circle(${mapClipPercentage}% at 50% 50%)`;
 
   // Focus Areas Animation hooks
@@ -171,8 +171,10 @@ const Home = () => {
 
   return (
     <div>
+      {/* Hero Section  */}
       <Herosection />
 
+      {/* About Section  */}
       <section className="py-10 relative bg-bg-color">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
@@ -222,56 +224,67 @@ const Home = () => {
                   title: "Water Conservation",
                   info: "Lorem ipsum dolor sit amet ociae idu ailsing elit, sed dini net gamtz.",
                   img: "about/6.png",
+                  link: "/projectdetails/jal-samridhi-water-conservation", // ✅ dynamic route
                 },
                 {
                   title: "Sustainable Agriculture",
                   info: "Lorem ipsum dolor sit amet ociae idu ailsing elit, sed dini net gamtz.",
                   img: "about/3.png",
+                  link: "/projectdetails/demo-2",
                 },
                 {
                   title: "Community Development",
                   info: "Lorem ipsum dolor sit amet ociae idu ailsing elit, sed dini net gamtz.",
                   img: "about/5.png",
+                  link: "/projectdetails/project-show",
                 },
               ].map((card, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white rounded-2xl shadow-sm text-center border border-gray-100 pb-6 flex flex-col h-full hover:shadow-md transition-shadow"
-                >
-                  <div className="p-4">
-                    <img
-                      src={card.img}
-                      alt={card.title}
-                      className="w-full h-32 object-cover rounded-xl shadow-sm"
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          "https://via.placeholder.com/500x300?text=Image+Not+Found";
-                      }}
-                    />
-                  </div>
+                <Link to={card.link} key={idx}>
+                  {" "}
+                  {/* 👈 FULL CARD CLICKABLE */}
+                  <div className="bg-white rounded-2xl shadow-sm text-center border border-gray-100 pb-6 flex flex-col h-full hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="p-4">
+                      <img
+                        src={card.img}
+                        alt={card.title}
+                        className="w-full h-32 object-cover rounded-xl shadow-sm"
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            "https://via.placeholder.com/500x300?text=Image+Not+Found";
+                        }}
+                      />
+                    </div>
 
-                  <div className="p-5 grow flex flex-col">
-                    <h3 className="text-xl font-serif text-text-primary mb-3">
-                      {card.title}
-                    </h3>
-                    <p className="text-gray-500 text-sm mb-6 grow">
-                      {card.info}
-                    </p>
-
+                    <div className="p-5 grow flex flex-col">
+                      <h3 className="text-xl font-serif text-text-primary mb-3">
+                        {card.title}
+                      </h3>
+                      <p className="text-gray-500 text-sm mb-6 grow">
+                        {card.info}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section ref={focusRef} className="bg-bg-color relative flex justify-center py-4 overflow-hidden">
+      {/* Our Focus Area  */}
+      <section
+        ref={focusRef}
+        className="bg-bg-color relative flex justify-center py-4 overflow-hidden"
+      >
         <motion.div
-          style={{ width: "100%", maxWidth: focusMaxWidth, borderRadius: focusBorderRadius, scale: focusScale }}
+          style={{
+            width: "100%",
+            maxWidth: focusMaxWidth,
+            borderRadius: focusBorderRadius,
+            scale: focusScale,
+          }}
           className="mx-auto bg-accent text-center py-16 md:py-24 px-6 sm:px-12 lg:px-16 shadow-xl relative group"
         >
-
           <motion.h2
             initial={{ y: -20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -357,10 +370,10 @@ const Home = () => {
         </motion.div>
       </section>
 
-
-
+      {/* Project Section  */}
       <ProjectSlider />
 
+      {/* Our Program  */}
       <section className="py-10 bg-bg-color">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-serif text-text-primary mb-12">
@@ -428,11 +441,16 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Testimonial  */}
       <Testimonials />
 
+      {/* Get Involved  */}
       <section
         className="py-20 relative bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')" }}
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+        }}
       >
         {/* Elegant Dark Overlay */}
         <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"></div>
@@ -487,31 +505,32 @@ const Home = () => {
         </div>
       </section>
 
-
+      {/* Map Section  */}
       <section className="py-16 bg-bg-color">
         <div className="max-w-7xl mx-auto px-4">
-
           <h2 className="text-4xl font-serif text-text-primary mb-10 text-center">
             Our Grassroots Presence
           </h2>
 
           {/* 🔥 MAIN LAYOUT */}
-         {/* 🔥 MAIN LAYOUT */}
+          {/* 🔥 MAIN LAYOUT */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
             {/* 🗺️ MAP (LEFT - bigger) */}
-            <div ref={mapRef} className="lg:col-span-2 relative h-150 md:h-200 flex items-center justify-center bg-transparent">
+            <div
+              ref={mapRef}
+              className="lg:col-span-2 relative h-150 md:h-200 flex items-center justify-center bg-transparent"
+            >
               <motion.div
                 style={{
                   scale: mapScale,
                   clipPath: mapClipPath,
-                  WebkitClipPath: mapClipPath, 
+                  WebkitClipPath: mapClipPath,
                   transformOrigin: "center center",
                   backfaceVisibility: "hidden",
                   width: "100%",
                   height: "100%",
                   position: "relative",
-                  zIndex: 10
+                  zIndex: 10,
                 }}
                 className="bg-accent rounded-xl overflow-hidden shadow-lg"
               >
@@ -521,29 +540,26 @@ const Home = () => {
             </div>
 
             {/* 📊 DYNAMIC SIDEBAR (RIGHT) */}
-            <div id="impact" className="bg-white sticky top-24  rounded-xl shadow-sm border border-gray-100 p-8 min-h-112.5">
-              
+            <div
+              id="impact"
+              className="bg-white sticky top-24  rounded-xl shadow-sm border border-gray-100 p-8 min-h-112.5"
+            >
               {/* IF A STATE IS CLICKED, SHOW ITS PROJECTS */}
               {selectedMapState ? (
                 <div>
-
-
-                <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
+                  <h3 className="text-xl font-serif font-bold text-text-primary mb-6 flex items-center gap-2">
                     <span className="text-2xl mr-2">📊</span> Impact Snapshot
                   </h3>
 
-                    <br />
-
+                  <br />
 
                   <div className="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
-                  
-                    
                     <h4 className="text-2xl font-serif font-bold text-text-primary flex items-center">
-                    
-                      <span className="text-2xl mr-2">📍State:- </span> {selectedMapState.name}
+                      <span className="text-2xl mr-2">📍State:- </span>{" "}
+                      {selectedMapState.name}
                     </h4>
-                    <button 
-                      onClick={() => setSelectedMapState(null)} 
+                    <button
+                      onClick={() => setSelectedMapState(null)}
                       className="text-gray-400 hover:text-red-500 text-2xl font-bold transition-colors"
                       title="Close"
                     >
@@ -558,9 +574,16 @@ const Home = () => {
                       </p>
                       <ul className="space-y-3 max-h-75 overflow-y-auto pr-2 custom-scrollbar">
                         {selectedMapState.projects.map((proj, idx) => (
-                          <li key={idx} className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm">
-                            <span className="text-primary text-lg leading-none">•</span>
-                            <span className="text-gray-700 font-medium text-sm leading-relaxed">{proj}</span>
+                          <li
+                            key={idx}
+                            className="flex items-start gap-3 bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm"
+                          >
+                            <span className="text-primary text-lg leading-none">
+                              •
+                            </span>
+                            <span className="text-gray-700 font-medium text-sm leading-relaxed">
+                              {proj}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -568,12 +591,15 @@ const Home = () => {
                   ) : (
                     <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
                       <span className="text-4xl block mb-3 opacity-50">🌱</span>
-                      <p className="text-gray-500 font-medium">No active projects</p>
-                      <p className="text-gray-400 text-sm mt-1">in this state currently.</p>
+                      <p className="text-gray-500 font-medium">
+                        No active projects
+                      </p>
+                      <p className="text-gray-400 text-sm mt-1">
+                        in this state currently.
+                      </p>
                     </div>
                   )}
                 </div>
-
               ) : (
                 /* OTHERWISE, SHOW DEFAULT IMPACT SNAPSHOT */
                 <div>
@@ -583,48 +609,59 @@ const Home = () => {
 
                   <ul className="space-y-6">
                     <li className="border-b pb-4">
-                      <div className="text-3xl font-bold text-primary mb-1">12</div>
-                      <div className="text-sm text-gray-600 uppercase tracking-wide">States Covered</div>
+                      <div className="text-3xl font-bold text-primary mb-1">
+                        12
+                      </div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">
+                        States Covered
+                      </div>
                     </li>
 
                     <li className="border-b pb-4">
-                      <div className="text-3xl font-bold text-secondary mb-1">45</div>
-                      <div className="text-sm text-gray-600 uppercase tracking-wide">Districts Operated In</div>
+                      <div className="text-3xl font-bold text-secondary mb-1">
+                        45
+                      </div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">
+                        Districts Operated In
+                      </div>
                     </li>
 
                     <li className="border-b pb-4">
-                      <div className="text-3xl font-bold text-accent mb-1">15+</div>
-                      <div className="text-sm text-gray-600 uppercase tracking-wide">Active Major Projects</div>
+                      <div className="text-3xl font-bold text-accent mb-1">
+                        15+
+                      </div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">
+                        Active Major Projects
+                      </div>
                     </li>
 
                     <li>
-                      <div className="text-3xl font-bold text-primary mb-1">2M+</div>
-                      <div className="text-sm text-gray-600 uppercase tracking-wide">Beneficiaries Reached</div>
+                      <div className="text-3xl font-bold text-primary mb-1">
+                        2M+
+                      </div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wide">
+                        Beneficiaries Reached
+                      </div>
                     </li>
                   </ul>
-                  
+
                   <div className="mt-8 pt-4 border-t border-gray-100 text-center">
-                    <p className="text-xs text-gray-400 italic">👆 Click any highlighted state on the map to view local projects.</p>
+                    <p className="text-xs text-gray-400 italic">
+                      👆 Click any highlighted state on the map to view local
+                      projects.
+                    </p>
                   </div>
                 </div>
               )}
             </div>
-            
           </div>
-
         </div>
       </section>
 
-
-
-
+      {/* Partner Section  */}
       <PartnersSection />
 
-
-
-
-
-
+      {/* Subscribe to Our Newsletter */}
 
       <section className="py-10 bg-primary/10 border-t border-primary/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -661,10 +698,11 @@ const Home = () => {
 
           {message.text && (
             <div
-              className={`max-w-lg mx-auto mt-4 p-3 rounded-lg text-sm font-medium ${message.type === "success"
-                ? "bg-green-100 text-green-800 border border-green-200"
-                : "bg-red-100 text-red-800 border border-red-200"
-                }`}
+              className={`max-w-lg mx-auto mt-4 p-3 rounded-lg text-sm font-medium ${
+                message.type === "success"
+                  ? "bg-green-100 text-green-800 border border-green-200"
+                  : "bg-red-100 text-red-800 border border-red-200"
+              }`}
             >
               {message.text}
             </div>

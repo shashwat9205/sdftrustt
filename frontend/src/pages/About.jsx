@@ -76,41 +76,56 @@ const About = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {/* Our Vision */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
-            <img
-              src="/about/5.png" // 👉 change image
-              alt="Our Vision"
-              className="w-full h-58 object-cover transition-transform duration-300 hover:scale-105"
-            />
+          <div
+            className="relative rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-74 flex items-center justify-center text-center"
+            style={{
+              backgroundImage: "url('/about/5.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/50"></div>
 
-            <div className="p-6 text-center">
-              <h3 className="text-xl font-serif text-text-primary mb-4">
-               💡 Our Vision
+            {/* Content */}
+            <div className="relative z-10 px-6">
+              <h3 className="text-2xl font-serif text-white mb-4">
+                💡 Our Vision
               </h3>
-
-              <p className="text-gray-600">
-                To create a sustainable and equitable world where every
-                community thrives in harmony with nature.
+              <p className="text-gray-200">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Reiciendis explicabo <span className="text-yellow-500">
+                  cumque impedit iusto quas laudantium Reiciendis explicabo
+                  tempora voluptatibus
+                </span>{" "}
+                , minus placeat ducimus architecto deleniti, similique vero
+                accusantium veniam eveniet necessitatibus nulla blanditiis?
               </p>
             </div>
           </div>
 
           {/* Our Mission */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
-            <img
-              src="/about/3.png" // 👉 change image
-              alt="Our Mission"
-              className="w-full h-58 object-cover transition-transform duration-300 hover:scale-105"
-            />
+          <div
+            className="relative rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-74 flex items-center justify-center text-center"
+            style={{
+              backgroundImage: "url('/about/3.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/50"></div>
 
-            <div className="p-6 text-center">
-              <h3 className="text-xl font-serif text-text-primary mb-4">
+            {/* Content */}
+            <div className="relative z-10 px-6">
+              <h3 className="text-2xl font-serif text-white mb-4">
                 🎯 Our Mission
               </h3>
-
-              <p className="text-gray-600">
-                Empowering marginalized communities through integrated
-                development programs and sustainable practices.
+              <p className="text-gray-200">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                Voluptates placeat totam <span className="text-yellow-500">dolor officiis nemo aliquid, ipsum est
+                dolorum quis optio voluptatibus</span> , necessitatibus repudiandae
+                voluptatum quisquam laboriosam animi provident ab natus.
               </p>
             </div>
           </div>
