@@ -51,7 +51,7 @@ useEffect(() => {
     setActiveMobileMenu(activeMobileMenu === menu ? null : menu);
   };
 
-  const menuItems = [
+ const menuItems = [
     {
       name: 'About',
       path: '/about',
@@ -61,7 +61,7 @@ useEffect(() => {
         { label: 'Leadership', path: '/about#leadership', icon: '👥' },
         { label: 'Our Approach', path: '/about#approach', icon: '🎯' },
         { label: 'Partners', path: '/about#partners', icon: '🤝' },
-        { label: 'FAQ', path: '/about#fAq', icon: '🙋' },
+        { label: 'FAQ', path: '/about#faq', icon: '🙋' }, // Fixed casing here
       ],
     },
     {
@@ -75,12 +75,6 @@ useEffect(() => {
     {
       name: 'Our Projects',
       path: '/projects',
-      // hasDropdown: true,
-      // dropdownItems: [
-      //   { label: 'Ongoing Projects', path: '/projects#ongoing', icon: '🏢' },
-      //   { label: 'State-wise Listings', path: '/projects#listings', icon: '🗺️' },
-      //   { label: 'Impact Snapshot', path: '/projects#impact', icon: '📊' },
-      // ],
     },
     {
       name: 'Publications',

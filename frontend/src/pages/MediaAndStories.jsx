@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { API_BASE_URL, ADMIN_BASE_URL } from '../config';
-// eslint-disable-next-line no-unused-vars
+ 
 import { motion } from 'framer-motion';
 
 const MediaAndStories = () => {
@@ -21,6 +21,10 @@ const MediaAndStories = () => {
   const [videos, setVideos] = useState([]);
   const [isVideoLoading, setIsVideoLoading] = useState(true);
   const [playingVideoId, setPlayingVideoId] = useState(null);
+
+  // States for Press
+  const [pressCov, setPressCov] = useState([]);
+  const [isPressLoading, setIsPressLoading] = useState(true);
 
   // Handle URL hash navigation (e.g., /media#videos)
   useEffect(() => {
@@ -52,7 +56,7 @@ const MediaAndStories = () => {
         } else {
           setError(data.message || 'Failed to fetch photos');
         }
-      // eslint-disable-next-line no-unused-vars
+       
       } catch (err) {
         setError('Could not connect to the database API. Check if your PHP server is running.');
       } finally {
@@ -81,6 +85,26 @@ const MediaAndStories = () => {
     };
 
     fetchVideos();
+  }, []);
+
+  // 3. Fetch Press Coverage from Database
+  useEffect(() => {
+    const fetchPressCoverage = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/press_coverage.php?t=${Date.now()}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+          setPressCov(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch press coverage', err);
+      } finally {
+        setIsPressLoading(false);
+      }
+    };
+
+    fetchPressCoverage();
   }, []);
 
   // Helper function to turn normal YouTube links into playable embedded links
@@ -124,24 +148,7 @@ const MediaAndStories = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isPhotoModalOpen, handlePrevPhoto, handleNextPhoto]);
 
-  const pressCov = [
-    {
-        id: 1,
-        tag: "The Daily Chronicle",
-        datee: "Sep 15, 2023",
-        title: "NGO Recognized for Exemplary Work in Sustainable Development",
-        image: "gallery/1.png",
-        para: "An independent review highlights the outstanding contributions made by the foundation in improving rural livelihood standards across 5 states, setting a benchmark for community-led initiatives..."
-    },
-    {
-        id: 2,
-        tag: "The Daily Chronicle",
-        datee: "Sep 15, 2023",
-        title: "NGO Recognized for Exemplary Work in Sustainable Development",
-        image: "gallery/2.png",
-        para: "An independent review highlights the outstanding contributions made by the foundation in improving rural livelihood standards across 5 states, setting a benchmark for community-led initiatives..."
-    },
-  ];
+  // Press Coverage states have been defined via useState above
 
   return (
     <div className="bg-white min-h-screen relative">
@@ -315,27 +322,38 @@ const MediaAndStories = () => {
               animate={{ opacity: 1 }}
               className="space-y-6 max-w-4xl mx-auto"
             >
-              {pressCov.map(item => (
-                <a key={item.id} href="#" className="flex flex-col md:flex-row gap-6 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
-                  <div className="md:w-48 h-32 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 shrink-0 overflow-hidden">
-                    <div className="group-hover:scale-105 transition-transform w-full h-full">
-                      <img src={item.image} alt="" className='w-full h-full object-cover' />
+              {isPressLoading ? (
+                <div className="py-12 text-center text-gray-500 flex flex-col items-center">
+                   <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+                   Loading press coverage...
+                </div>
+              ) : pressCov.length === 0 ? (
+                <div className="py-12 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                  No press coverage found at the moment.
+                </div>
+              ) : (
+                pressCov.map(item => (
+                  <Link key={item.id} to={`/press-coverage/${item.slug}`} className="flex flex-col md:flex-row gap-6 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                    <div className="md:w-48 h-32 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 shrink-0 overflow-hidden">
+                      <div className="group-hover:scale-105 transition-transform w-full h-full">
+                        <img src={getImageUrl(item.image_url || item.image)} alt="" className='w-full h-full object-cover' />
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold">{item.tag}</span>
-                      <span className="text-gray-400 text-sm">• {item.datee}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold">{item.tag || "Press coverage"}</span>
+                        <span className="text-gray-400 text-sm">• {item.datee}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-text-primary mb-2 group-hover:text-primary transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm line-clamp-3">
+                        {item.para}
+                      </p>
                     </div>
-                    <h3 className="text-xl font-bold text-text-primary mb-2 group-hover:text-primary transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      {item.para}
-                    </p>
-                  </div>
-                </a>
-              ))}
+                  </Link>
+                ))
+              )}
             </motion.div>
           )}
           

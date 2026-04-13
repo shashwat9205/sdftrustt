@@ -19,6 +19,7 @@ import Testimonials from './pages/Testimonials';
 import VolunteerForm from './pages/VolenteerForm';
 import ProgramDetails from './pages/Programdetails';
 import ProjectDetails from './pages/Projectdetails';
+import PressCoverageDetails from './pages/PressCoverageDetails';
 
 
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="projectdetails/:slug" element={<ProjectDetails />} />
           <Route path="publications" element={<Publications />} />
           <Route path="media" element={<MediaAndStories />} />
+          <Route path="press-coverage/:slug" element={<PressCoverageDetails />} />
           <Route path="impact" element={<ImpactAndEvidence />} />
           <Route path="contact" element={<Contact />} />
           <Route path="donate" element={<Donate />} />
